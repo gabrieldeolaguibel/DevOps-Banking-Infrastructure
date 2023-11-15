@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentType": {
+            "value": "prod"
+        },
+        "postgreSQLServerName": {
+            "value": "ketis-dbsrv-uat"
+        },
+        "postgreSQLDatabaseName": {
+            "value": "ketis-db-uat"
+        },
+        "appServicePlanName": {
+            "value": "ketis-asp-uat"
+        },
+        "appServiceAPIAppName": {
+            "value": "ketis-be-uat"
+        },
+        "appServiceAppName": {
+            "value": "ketis-fe-uat"
+        },
+        "azureMonitorName": {
+            "value": "ketis-am-uat"
+        },
+        "appInsightsName": {
+            "value": "ketis-ai-uat"
+        },
+        "location": {
+            "value": "Korea Central"
+        }
+    }
+}
