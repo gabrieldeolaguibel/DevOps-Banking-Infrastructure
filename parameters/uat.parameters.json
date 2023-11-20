@@ -6,25 +6,25 @@
             "value": "prod"
         },
         "postgreSQLServerName": {
-            "value": "ketis-dbsrv-uat"
+            "value": "monke-dbsrv-uat"
         },
         "postgreSQLDatabaseName": {
-            "value": "ketis-db-uat"
+            "value": "monke-db-uat"
         },
         "appServicePlanName": {
-            "value": "ketis-asp-uat"
+            "value": "monke-asp-uat"
         },
         "appServiceAPIAppName": {
-            "value": "ketis-be-uat"
+            "value": "monke-be-uat"
         },
         "appServiceAppName": {
-            "value": "ketis-fe-uat"
+            "value": "monke-fe-uat"
         },
         "azureMonitorName": {
-            "value": "ketis-am-uat"
+            "value": "monke-am-uat"
         },
         "appInsightsName": {
-            "value": "ketis-ai-uat"
+            "value": "monke-ai-uat"
         },
         "location": {
             "value": "Korea Central"
