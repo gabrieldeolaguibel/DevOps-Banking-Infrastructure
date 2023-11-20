@@ -74,3 +74,31 @@ jobs:
           template: ./main.bicep
           parameters: ./parameters/uat.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_UAT }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_UAT }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
           deploymentName: ${{ env.USER_ALIAS }}
+
+  deploy-prod:
+    #   if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    needs: [build, deploy-dev, deploy-uat]
+    environment:
+      name: "Production"
+    env:
+      ENV: prod
+      
+    steps:
+      # Checkout code
+      - uses: actions/checkout@main
+
+        # Log into Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        # Deploy Bicep file
+      - name: deploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
+          template: ./main.bicep
+          parameters: ./parameters/uat.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_PROD }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_PROD }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
+          deploymentName: ${{ env.USER_ALIAS }}
