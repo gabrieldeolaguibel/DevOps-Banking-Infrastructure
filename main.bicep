@@ -1,7 +1,8 @@
 // Main.bicep
 
 // Parameters
-param location string = 'Norway East'
+param location string = 'Korea Central'
+param environment string = 'prod' // So that Azure Monitor is only created once in the prod env
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
 
@@ -91,7 +92,7 @@ module appService 'modules/app-service.bicep' = {
   ]
 }
 
-resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
+resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = if (environment == 'prod') {
   name: azureMonitorName
   location: location
 }
