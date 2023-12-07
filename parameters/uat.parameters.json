@@ -1,27 +1,30 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "environmentType": {
-            "value": "prod"
-        },
-        "postgreSQLServerName": {
-            "value": "monke-dbsrv-uat"
-        },
-        "postgreSQLDatabaseName": {
-            "value": "monke-db-uat"
-        },
-        "appServicePlanName": {
-            "value": "monke-asp-uat"
-        },
-        "appServiceAPIAppName": {
-            "value": "monke-be-uat"
-        },
-        "appServiceAppName": {
-            "value": "monke-fe-uat"
-        },
-        "location": {
-            "value": "Korea Central"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentType": {
+      "value": "prod"
+    },
+    "postgreSQLServerName": {
+      "value": "monke-dbsrv-uat"
+    },
+    "postgreSQLDatabaseName": {
+      "value": "monke-db-uat"
+    },
+    "appServicePlanName": {
+      "value": "monke-asp-uat"
+    },
+    "appServiceAPIAppName": {
+      "value": "monke-be-uat"
+    },
+    "appServiceAppName": {
+      "value": "monke-fe-uat"
+    },
+    "appInsightsName": {
+      "value": "monke-ai-uat"
+    },
+    "location": {
+      "value": "Korea Central"
     }
+  }
 }

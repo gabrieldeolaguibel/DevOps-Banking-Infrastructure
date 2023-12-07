@@ -1,27 +1,33 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "environmentType": {
-            "value": "prod"
-        },
-        "postgreSQLServerName": {
-            "value": "monke-dbsrv-prod"
-        },
-        "postgreSQLDatabaseName": {
-            "value": "monke-db-prod"
-        },
-        "appServicePlanName": {
-            "value": "monke-asp-prod"
-        },
-        "appServiceAPIAppName": {
-            "value": "monke-be-prod"
-        },
-        "appServiceAppName": {
-            "value": "monke-fe-prod"
-        },
-        "location": {
-            "value": "Korea Central"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentType": {
+      "value": "prod"
+    },
+    "postgreSQLServerName": {
+      "value": "monke-dbsrv-prod"
+    },
+    "postgreSQLDatabaseName": {
+      "value": "monke-db-prod"
+    },
+    "appServicePlanName": {
+      "value": "monke-asp-prod"
+    },
+    "appServiceAPIAppName": {
+      "value": "monke-be-prod"
+    },
+    "appServiceAppName": {
+      "value": "monke-fe-prod"
+    },
+    "azureMonitorName": {
+      "value": "monke-am"
+    },
+    "appInsightsName": {
+      "value": "monke-ai-prod"
+    },
+    "location": {
+      "value": "Korea Central"
     }
+  }
 }

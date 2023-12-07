@@ -5,6 +5,13 @@ param location string = 'Norway East'
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
 
+// Monitoring Parameters
+
+@sys.description('The name of the Azure Monitor workspace')
+param azureMonitorName string
+@sys.description('The name of the Application Insights')
+param appInsightsName string
+
 
 // Flexible server for PostgreSQL module
 module flexibleServer './modules/db-for-postgre-sql/flexible-server/main.bicep' = {
@@ -84,5 +91,18 @@ module appService 'modules/app-service.bicep' = {
   ]
 }
 
+resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
+  name: azureMonitorName
+  location: location
+}
 
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appInsightsName
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName)
+  }
+}
 
