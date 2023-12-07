@@ -6,25 +6,25 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "ketis-dbsrv-dev"
+            "value": "devoopsididitagain-dbsrv-dev"
         },
         "postgreSQLDatabaseName": {
-            "value": "ketis-db-dev"
+            "value": "devoopsididitagain-db-dev"
         },
         "appServicePlanName": {
-            "value": "ketis-asp-dev"
+            "value": "devoopsididitagain-asp-dev"
         },
         "appServiceAPIAppName": {
-            "value": "ketis-be-dev"
+            "value": "devoopsididitagain-be-dev"
         },
         "appServiceAppName": {
-            "value": "ketis-fe-dev"
+            "value": "devoopsididitagain-fe-dev"
         },
         "azureMonitorName": {
-            "value": "ketis-am"
+            "value": "devoopsididitagain-am"
         },
         "appInsightsName": {
-            "value": "ketis-ai"
+            "value": "devoopsididitagain-ai"
         },
         "location": {
             "value": "Korea Central"

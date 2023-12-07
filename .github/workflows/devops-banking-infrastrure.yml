@@ -3,11 +3,11 @@ name: ie-bank-infra
 on: [push, workflow_dispatch]
 
 env:
-  RESOURCE_GROUP_DEV: aguadamillas_students_2
+  RESOURCE_GROUP_DEV: aguadamillas_students_1
   RESOURCE_GROUP_UAT: aguadamillas_students_2
   SUBSCRIPTION_ID_DEV: e0b9cada-61bc-4b5a-bd7a-52c606726b3b
   SUBSCRIPTION_ID_UAT: e0b9cada-61bc-4b5a-bd7a-52c606726b3b
-  USER_ALIAS: ketis
+  USER_ALIAS: monke
 
 jobs:
   build:
@@ -28,8 +28,8 @@ jobs:
       name: "Development"
     env:
       ENV: dev
-      DBHOST: ketis-dbsrv-dev.postgres.database.azure.com
-      DBNAME: ketis-db-dev
+      DBHOST: devoopsididitagain-dbsrv-dev.postgres.database.azure.com
+      DBNAME: devoopsididitagain-db-dev
       FLASK_APP: app.py
       FLASK_DEBUG: 1
 
@@ -60,8 +60,8 @@ jobs:
       name: "User Acceptance Testing"
     env:
       ENV: uat
-      DBHOST: ketis-dbsrv-uat.postgres.database.azure.com
-      DBNAME: ketis-db-uat
+      DBHOST: devoopsididitagain-dbsrv-uat.postgres.database.azure.com
+      DBNAME: devoopsididitagain-db-uat
       FLASK_APP: app.py
       FLASK_DEBUG: 1
 
