@@ -20,6 +20,9 @@
     "appServiceAppName": {
       "value": "monke-fe-uat"
     },
+    "azureMonitorName": {
+      "value": "monke-am"
+    },
     "appInsightsName": {
       "value": "monke-ai-uat"
     },
