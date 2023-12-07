@@ -92,10 +92,10 @@ module appService 'modules/app-service.bicep' = {
   ]
 }
 
-/* resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = if (ENV == 'prod' && azureMonitorName != 'dummy-value') {
+resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = if (ENV == 'prod' && azureMonitorName != 'dummy-value') {
   name: azureMonitorName
   location: location
-} */
+} 
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
@@ -104,7 +104,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   properties: {
     Application_Type: 'web'
     // Conditional linking to Azure Monitor
-    // WorkspaceResourceId: ENV == 'prod' ? resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName) : null
+    WorkspaceResourceId: ( ENV == 'prod' && azureMonitorName != 'dummy-value' ) ? resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName) : null
   }
 }
 
