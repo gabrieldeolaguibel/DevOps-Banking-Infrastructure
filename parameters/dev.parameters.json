@@ -20,12 +20,6 @@
         "appServiceAppName": {
             "value": "monke-fe-dev"
         },
-        "azureMonitorName": {
-            "value": "monke-am"
-        },
-        "appInsightsName": {
-            "value": "monke-ai"
-        },
         "location": {
             "value": "Korea Central"
         }
