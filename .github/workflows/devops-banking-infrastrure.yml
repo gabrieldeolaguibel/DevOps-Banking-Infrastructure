@@ -1,6 +1,14 @@
 name: ie-bank-infra
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 env:
   RESOURCE_GROUP_DEV: aguadamillas_students_1
@@ -13,15 +21,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout code
       - uses: actions/checkout@main
-
-        # Lint Bicep code
       - name: Run Bicep linter
         run: az bicep build --file ./main.bicep
 
   deploy-dev:
-    #   if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev' || startsWith(github.ref, 'refs/heads/feature/')
     runs-on: ubuntu-latest
     needs: build
     environment:
@@ -29,15 +34,10 @@ jobs:
     env:
       ENV: dev
     steps:
-      # Checkout code
       - uses: actions/checkout@main
-
-        # Log into Azure
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-        # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
         with:
@@ -49,24 +49,18 @@ jobs:
           failOnStdErr: false
 
   deploy-uat:
-    #   if: github.ref == 'refs/heads/dev'
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
     needs: [build, deploy-dev]
     environment:
       name: "User Acceptance Testing"
     env:
       ENV: uat
-      
     steps:
-      # Checkout code
       - uses: actions/checkout@main
-
-        # Log into Azure
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-        # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
         with:
@@ -78,30 +72,22 @@ jobs:
           failOnStdErr: false
 
   deploy-prod:
-    #   if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [build, deploy-dev, deploy-uat]
     environment:
       name: "Production"
     env:
       ENV: prod
-      
     steps:
-      # Checkout code
       - uses: actions/checkout@main
-
-        # Log into Azure
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-        # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
-          parameters: ./parameters/uat.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_PROD }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_PROD }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
-          deploymentName: ${{ env.USER_ALIAS }}
-          failOnStdErr: false
+          parameters: ./parameters/uat.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_PROD }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_PROD }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{
