@@ -20,9 +20,6 @@
     "appServiceAppName": {
       "value": "monke-fe-dev"
     },
-    "azureMonitorName": {
-      "value": "dummy-value"
-    },
     "appInsightsName": {
       "value": "monke-ai-dev"
     },
