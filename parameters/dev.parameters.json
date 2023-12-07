@@ -6,25 +6,25 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "devoopsididitagain-dbsrv-dev"
+            "value": "monke-dbsrv-dev"
         },
         "postgreSQLDatabaseName": {
-            "value": "devoopsididitagain-db-dev"
+            "value": "monke-db-dev"
         },
         "appServicePlanName": {
-            "value": "devoopsididitagain-asp-dev"
+            "value": "monke-asp-dev"
         },
         "appServiceAPIAppName": {
-            "value": "devoopsididitagain-be-dev"
+            "value": "monke-be-dev"
         },
         "appServiceAppName": {
-            "value": "devoopsididitagain-fe-dev"
+            "value": "monke-fe-dev"
         },
         "azureMonitorName": {
-            "value": "devoopsididitagain-am"
+            "value": "monke-am"
         },
         "appInsightsName": {
-            "value": "devoopsididitagain-ai"
+            "value": "monke-ai"
         },
         "location": {
             "value": "Korea Central"
