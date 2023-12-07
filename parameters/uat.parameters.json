@@ -21,7 +21,7 @@
       "value": "monke-fe-uat"
     },
     "azureMonitorName": {
-      "value": "monke-am"
+      "value": "dummy-value"
     },
     "appInsightsName": {
       "value": "monke-ai-uat"

@@ -2,14 +2,14 @@
 
 // Parameters
 param location string = 'Korea Central'
-// param environment string = 'prod' // So that Azure Monitor is only created once in the prod 
+param environment string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
 
 // Monitoring Parameters
 
 @sys.description('The name of the Azure Monitor workspace')
-param azureMonitorName string // = if (environment == 'prod') { azureMonitorName } else { null }
+param azureMonitorName string
 @sys.description('The name of the Application Insights')
 param appInsightsName string
 
@@ -92,7 +92,7 @@ module appService 'modules/app-service.bicep' = {
   ]
 }
 
-resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
+resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = if (environment == 'prod') {
   name: azureMonitorName
   location: location
 }
@@ -103,7 +103,8 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   kind: 'web'
   properties: {
     Application_Type: 'web'
-    WorkspaceResourceId: resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName)
+    // Conditional linking to Azure Monitor
+    WorkspaceResourceId: environment == 'prod' ? resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName) : null
   }
 }
 
