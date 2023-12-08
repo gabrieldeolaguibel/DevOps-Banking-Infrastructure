@@ -24,6 +24,41 @@ jobs:
       - uses: actions/checkout@main
       - name: Run Bicep linter
         run: az bicep build --file ./main.bicep
+  check-deploy-keyvault:
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.check_kv.outputs.exists }}
+    steps:
+      - name: Check if Key Vault exists
+        id: check_kv
+        run: |
+          EXISTS=$(az keyvault list --resource-group ${{ env.RESOURCE_GROUP_DEV }} --query "[?name=='YourKeyVaultName'].name" -o tsv)
+          if [ -z "$EXISTS" ]; then
+            echo "::set-output name=exists::false"
+          else
+            echo "::set-output name=exists::true"
+          fi
+
+  deploy-key-vault:
+    runs-on: ubuntu-latest
+    needs: check-deploy-keyvault
+    if: needs.check-deploy-keyvault.outputs.exists == 'false'
+    steps:
+      - uses: actions/checkout@main
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Key Vault
+        if: ${{ env.RESOURCE_GROUP_DEV }} == 'aguadamillas_students_1' # Ensures it's in resource group 1
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+          template: ./key-vault.bicep
+          parameters: ./parameters/key-vault.parameters.json
+          deploymentName: keyvault-${{ github.run_id }}
+          failOnStdErr: false
+
   deploy-dev:
     if: github.ref == 'refs/heads/dev' || startsWith(github.ref, 'refs/heads/feature/')
     runs-on: ubuntu-latest
@@ -44,15 +79,6 @@ jobs:
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./main.bicep
           parameters: ./parameters/dev.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_DEV }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_DEV }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
-          deploymentName: ${{ env.USER_ALIAS }}
-          failOnStdErr: false
-      - name: Deploy Key Vault
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-          template: ./key-vault.bicep
-          parameters: ./parameters/key-vault.parameters.json
           deploymentName: ${{ env.USER_ALIAS }}
           failOnStdErr: false
 
