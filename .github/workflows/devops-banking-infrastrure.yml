@@ -83,6 +83,7 @@ jobs:
           template: ./acr.bicep
           parameters: ./parameters/acr.parameters.json
           deploymentName: acr-deployment-${{ github.run_number }}
+          failOnStdErr: false
 
   deploy-dev:
     if: contains(github.ref, 'refs/heads/feature/')
