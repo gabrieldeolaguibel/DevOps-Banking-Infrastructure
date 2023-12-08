@@ -24,17 +24,6 @@ jobs:
       - uses: actions/checkout@main
       - name: Run Bicep linter
         run: az bicep build --file ./main.bicep
-    #Deploy Key Vault
-      - name: Deploy Key Vault
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-          template: ./key-vault.bicep
-          parameters: ./parameters/key-vault.parameters.json
-          deploymentName: ${{ env.USER_ALIAS }}
-          failOnStdErr: false
-
   deploy-dev:
     if: github.ref == 'refs/heads/dev' || startsWith(github.ref, 'refs/heads/feature/')
     runs-on: ubuntu-latest
@@ -57,6 +46,16 @@ jobs:
           parameters: ./parameters/dev.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_DEV }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_DEV }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
           deploymentName: ${{ env.USER_ALIAS }}
           failOnStdErr: false
+      - name: Deploy Key Vault
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+          template: ./key-vault.bicep
+          parameters: ./parameters/key-vault.parameters.json
+          deploymentName: ${{ env.USER_ALIAS }}
+          failOnStdErr: false
+
 
   deploy-uat:
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
