@@ -67,7 +67,7 @@ jobs:
 
   deploy-acr:
     runs-on: ubuntu-latest
-    needs: [build, check-deploy-keyvault, deploy-key-vault]
+    needs: [check-deploy-keyvault, deploy-key-vault]
     if: (needs.check-deploy-keyvault.outputs.exists == 'true') || (needs.deploy-key-vault.result == 'success')
     steps:
       - uses: actions/checkout@main
@@ -78,7 +78,6 @@ jobs:
       - name: Deploy Azure Container Registry
         uses: azure/arm-deploy@v1
         with:
-          scope: resourceGroup
           subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./acr.bicep
