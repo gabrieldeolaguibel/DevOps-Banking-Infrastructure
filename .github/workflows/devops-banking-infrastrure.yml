@@ -134,7 +134,7 @@ jobs:
           failOnStdErr: false
 
   deploy-prod:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [build]
     environment:
