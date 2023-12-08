@@ -1,9 +1,17 @@
 // Main.bicep
 
 // Parameters
-param location string = 'Norway East'
+param location string = 'Korea Central'
+param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
+
+// Monitoring Parameters
+
+@sys.description('The name of the Azure Monitor workspace')
+param azureMonitorName string
+@sys.description('The name of the Application Insights')
+param appInsightsName string
 
 
 // Flexible server for PostgreSQL module
@@ -84,5 +92,19 @@ module appService 'modules/app-service.bicep' = {
   ]
 }
 
+resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = if (ENV == 'prod' && azureMonitorName != 'dummy-value') {
+  name: azureMonitorName
+  location: location
+} 
 
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appInsightsName
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    // Conditional linking to Azure Monitor
+    WorkspaceResourceId: ( ENV == 'prod' && azureMonitorName != 'dummy-value' ) ? resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName) : null
+  }
+}
 
