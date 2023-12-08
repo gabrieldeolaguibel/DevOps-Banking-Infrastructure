@@ -24,6 +24,25 @@ jobs:
       - uses: actions/checkout@main
       - name: Run Bicep linter
         run: az bicep build --file ./main.bicep
+    
+  deploy-acr:
+    runs-on: ubuntu-latest
+    needs: [build] # If the ACR deployment depends on the build job
+    steps:
+      - uses: actions/checkout@main
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Container Registry
+        uses: azure/arm-deploy@v1
+        with:
+          scope: resourceGroup
+          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+          template: ./acr.bicep
+          parameters: ./parameters/acr.parameters.json
+          deploymentName: acr-deployment-${{ github.run_number }}
         
   check-deploy-keyvault:
     runs-on: ubuntu-latest
