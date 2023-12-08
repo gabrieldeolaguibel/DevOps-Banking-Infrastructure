@@ -24,11 +24,17 @@ jobs:
       - uses: actions/checkout@main
       - name: Run Bicep linter
         run: az bicep build --file ./main.bicep
+        
   check-deploy-keyvault:
     runs-on: ubuntu-latest
     outputs:
       exists: ${{ steps.check_kv.outputs.exists }}
     steps:
+      - uses: actions/checkout@main
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Check if Key Vault exists
         id: check_kv
         run: |
@@ -45,11 +51,11 @@ jobs:
     if: needs.check-deploy-keyvault.outputs.exists == 'false'
     steps:
       - uses: actions/checkout@main
-      - uses: azure/login@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy Key Vault
-        if: ${{ env.RESOURCE_GROUP_DEV }} == 'aguadamillas_students_1' # Ensures it's in resource group 1
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
