@@ -8,7 +8,6 @@ on:
   pull_request:
     branches:
       - main
-      - 'feature/**'
   workflow_dispatch:
 
 env:
