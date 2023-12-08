@@ -152,3 +152,4 @@ jobs:
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
           parameters: ./parameters/prod.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_PROD }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_PROD }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
+          failOnStdErr: false
