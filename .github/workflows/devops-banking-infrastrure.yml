@@ -110,7 +110,7 @@ jobs:
 
 
   deploy-uat:
-    if: if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [build, deploy-dev]
     environment:
