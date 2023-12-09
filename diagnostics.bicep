@@ -1,11 +1,11 @@
 param diagnosticsLogAnalyticsWorkspaceId string
 param metricsToEnable array = ['AllMetrics']
 
-/* // Existing resources for App Service Plan (ASP)
+// Existing resources for App Service Plan (ASP)
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-dev'
 }
-resource appServicePlanUat 'Microsoft.Web/serverfarms@2021-02-01' existing = {
+/* resource appServicePlanUat 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-uat'
 }
 resource appServicePlanProd 'Microsoft.Web/serverfarms@2021-02-01' existing = {
@@ -47,22 +47,18 @@ resource postgreSQLServerProd 'Microsoft.DBforPostgreSQL/servers@2017-12-01' exi
 } */
 
 
-/* // Function to create diagnostic settings for App Service Plan (ASP)
+// Function to create diagnostic settings for App Service Plan (ASP) -> There are no logs for ASP
 resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'lemonke-asp-dev-diagnostics'
   scope: appServicePlanDev
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    logs: [{
-      category: 'AuditLogs'
-      enabled: true
-    }]
     metrics: [for metric in metricsToEnable: {
       category: metric
       enabled: true
     }]
   }
-} */
+}
 
 
 // Function to create diagnostic settings for Frontend Static App -> logs are not activated as it costs money!
@@ -81,6 +77,7 @@ resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@20
 // Function to create diagnostic settings for Backend App Service (BE)
 resource diagnosticSettingAppServiceApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' =  {
   name: 'lemonke-be-dev-diagnostics'
+  scope: appServiceAppDev
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
     logs: [{
@@ -92,12 +89,12 @@ resource diagnosticSettingAppServiceApp 'Microsoft.Insights/diagnosticSettings@2
       enabled: true
     }]
   }
-  scope: appServiceAppDev
 }
 
 // Azure Database for PostgreSQL
 resource diagnosticSettingPostgreSQLServer 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: '$dev-postgresql-diagnostics'
+  name: 'lemonke-dbsrv-dev-diagnostics'
+  scope: postgreSQLServerDev
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
     logs: [{
@@ -109,6 +106,5 @@ resource diagnosticSettingPostgreSQLServer 'Microsoft.Insights/diagnosticSetting
       enabled: true
     }]
   }
-  scope: postgreSQLServerDev
 }
 
