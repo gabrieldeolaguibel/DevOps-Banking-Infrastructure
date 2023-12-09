@@ -1,5 +1,4 @@
 param diagnosticsLogAnalyticsWorkspaceId string
-param logsToEnable array = ['HttpLogs', 'AppServiceConsoleLogs']
 param metricsToEnable array = ['AllMetrics']
 
 // Existing resources for App Service Plan (ASP)
@@ -70,8 +69,8 @@ resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@
   scope: appServicePlanDev
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    logs: [for log in logsToEnable: {
-      category: log
+    logs: [{
+      category: 'AuditLogs'
       enabled: true
     }]
     metrics: [for metric in metricsToEnable: {
