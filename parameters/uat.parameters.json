@@ -2,8 +2,8 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "environmentType": {
-      "value": "prod"
+    "location": {
+      "value": "Korea Central"
     },
     "postgreSQLServerName": {
       "value": "monke-dbsrv-uat"
@@ -11,23 +11,27 @@
     "postgreSQLDatabaseName": {
       "value": "monke-db-uat"
     },
+    "staticWebAppName": {
+      "value": "monke-fe-uat"
+    },
+    "sku": {
+      "value": {
+          "capacity": 4,
+          "family": "S",
+          "name": "S1",
+          "size": "S1",
+          "tier": "Standard"
+        }
+    },
     "appServicePlanName": {
       "value": "monke-asp-uat"
     },
-    "appServiceAPIAppName": {
-      "value": "monke-be-uat"
-    },
     "appServiceAppName": {
-      "value": "monke-fe-uat"
-    },
-    "azureMonitorName": {
-      "value": "dummy-value"
+      "value": "monke-be-uat"
     },
     "appInsightsName": {
       "value": "monke-ai-uat"
-    },
-    "location": {
-      "value": "Korea Central"
     }
   }
 }
+

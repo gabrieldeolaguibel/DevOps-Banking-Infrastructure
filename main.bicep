@@ -1,17 +1,35 @@
 // Main.bicep
 
 // Parameters
-param location string = 'Korea Central'
+param location string
 param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
 
-// Monitoring Parameters
+// Exisiting resources
 
-@sys.description('The name of the Azure Monitor workspace')
-param azureMonitorName string
-@sys.description('The name of the Application Insights')
-param appInsightsName string
+param keyVaultName string = 'monke-keyvault'
+//key vault reference
+resource keyvault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
+  name: keyVaultName
+ }
+
+// Azure Container Registry module
+param containerRegistryName string = 'monkecr'
+resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
+  name: containerRegistryName
+ }
+
+ // Static web app for front end
+param staticWebAppName string
+
+module staticWebApp './modules/web/static-site/main.bicep' = {
+  name: staticWebAppName
+  params: {
+    name: staticWebAppName
+    location: location
+  }
+}
 
 
 // Flexible server for PostgreSQL module
@@ -41,56 +59,58 @@ module dbForPostgreSQL './modules/db-for-postgre-sql/flexible-server/database/ma
 }
 
 // Azure Service Plan for Linux module
+param appServicePlanName string
+param sku object
 module servicePlan './modules/web/serverfarm/main.bicep' = {
   name: appServicePlanName
   params: {
     name: appServicePlanName
     location: location
-    sku: {
-      capacity: 1
-      family: 'B'
-      name: 'B1'
-      size: 'B1'
-      tier: 'Basic'
-    }
+    sku: sku
     reserved: true
   }
 }
 
-// Azure Web App for Linux containers module
-
+// Azure Web App for Linux containers module (Back-end)
 //parameters for App Service
-param appServiceAppName string
-param appServiceAPIAppName string
-param appServicePlanName string
-param appServiceAPIDBHostDBUSER string
-param appServiceAPIDBHostFLASK_APP string
-param appServiceAPIDBHostFLASK_DEBUG string
-param appServiceAPIEnvVarDBHOST string
-param appServiceAPIEnvVarDBNAME string
-param appServiceAPIEnvVarDBPASS string
-param appServiceAPIEnvVarENV string
-param environmentType string
-module appService 'modules/app-service.bicep' = {
-  name: 'appService'
-  params: {
-    location: location
-    environmentType: environmentType
-    appServiceAppName: appServiceAppName
-    appServiceAPIAppName: appServiceAPIAppName
-    appServicePlanName: appServicePlanName
-    appServiceAPIDBHostDBUSER: appServiceAPIDBHostDBUSER
-    appServiceAPIDBHostFLASK_APP: appServiceAPIDBHostFLASK_APP
-    appServiceAPIDBHostFLASK_DEBUG: appServiceAPIDBHostFLASK_DEBUG
-    appServiceAPIEnvVarDBHOST: appServiceAPIEnvVarDBHOST
-    appServiceAPIEnvVarDBNAME: appServiceAPIEnvVarDBNAME
-    appServiceAPIEnvVarDBPASS: appServiceAPIEnvVarDBPASS
-    appServiceAPIEnvVarENV: appServiceAPIEnvVarENV
-  }
+param containerRegistryImageName string = 'backend'
+param containerRegistryImageVersion string = 'latest'
+
+param appServiceAppName string // backend app hosting 
+param keyVaultSecretNameACRUsername string = 'acr-username'
+param keyVaultSecretNameACRPassword1 string = 'acr-password1'
+module webApp './modules/web/site/main.bicep' = {
+  name: appServiceAppName
   dependsOn: [
+    servicePlan
+    acr
+    keyvault
     dbForPostgreSQL
   ]
+  params: {
+    name: appServiceAppName
+    location: location
+    kind: 'app'
+    serverFarmResourceId: servicePlan.outputs.resourceId
+    siteConfig: {
+      linuxFxVersion: 'DOCKER|${containerRegistryName}.azurecr.io/${containerRegistryImageName}:${containerRegistryImageVersion}'
+      appCommandLine: ''
+    }
+    appSettingsKeyValuePairs: {
+      WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
+    }
+    dockerRegistryServerUrl: 'https://${containerRegistryName}.azurecr.io'
+    dockerRegistryServerUserName: keyvault.getSecret(keyVaultSecretNameACRUsername)
+    dockerRegistryServerPassword: keyvault.getSecret(keyVaultSecretNameACRPassword1)
+  }
 }
+
+// Monitoring Parameters
+
+@sys.description('The name of the Azure Monitor workspace')
+param azureMonitorName string
+@sys.description('The name of the Application Insights')
+param appInsightsName string
 
 resource azureMonitor 'Microsoft.OperationalInsights/workspaces@2020-08-01' = if (ENV == 'prod' && azureMonitorName != 'dummy-value') {
   name: azureMonitorName

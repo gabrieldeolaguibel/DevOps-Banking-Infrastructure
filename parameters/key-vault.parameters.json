@@ -5,6 +5,9 @@
       "keyVaultName": {
         "value": "monke-keyvault"
       },
+      "containerRegistryName": {
+        "value": "monkecr"
+      },
       "location": {
         "value": "Korea Central"
       }

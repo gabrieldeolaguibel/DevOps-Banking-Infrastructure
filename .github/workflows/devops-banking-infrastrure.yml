@@ -6,6 +6,7 @@ on:
       - main
       - 'feature/**'
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     branches:
       - main
   workflow_dispatch:
@@ -24,65 +25,23 @@ jobs:
       - uses: actions/checkout@main
       - name: Run Bicep linter
         run: az bicep build --file ./main.bicep
-        
-  check-deploy-keyvault:
-    runs-on: ubuntu-latest
-    outputs:
-      exists: ${{ steps.check_kv.outputs.exists }}
-    steps:
-      - uses: actions/checkout@main
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Check if Key Vault exists
-        id: check_kv
-        run: |
-          EXISTS=$(az keyvault list --resource-group ${{ env.RESOURCE_GROUP_DEV }} --query "[?name=='YourKeyVaultName'].name" -o tsv)
-          if [ -z "$EXISTS" ]; then
-            echo "::set-output name=exists::false"
-          else
-            echo "::set-output name=exists::true"
-          fi
 
-  deploy-key-vault:
+  deploy-key-vault-and-acr:
     runs-on: ubuntu-latest
-    needs: check-deploy-keyvault
-    if: needs.check-deploy-keyvault.outputs.exists == 'false'
     steps:
       - uses: actions/checkout@main
       - name: Login to Azure
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy Key Vault
+      - name: Deploy Key Vault and ACR
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./key-vault.bicep
           parameters: ./parameters/key-vault.parameters.json
-          deploymentName: keyvault-${{ github.run_id }}
-          failOnStdErr: false
-
-  deploy-acr:
-    runs-on: ubuntu-latest
-    needs: [check-deploy-keyvault, deploy-key-vault]
-    if: (needs.check-deploy-keyvault.outputs.exists == 'true') || (needs.deploy-key-vault.result == 'success')
-    steps:
-      - uses: actions/checkout@main
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy Azure Container Registry
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-          template: ./acr.bicep
-          parameters: ./parameters/acr.parameters.json
-          deploymentName: acr-deployment-${{ github.run_number }}
+          deploymentName: keyvaultacr-${{ github.run_id }}
           failOnStdErr: false
 
   deploy-dev:
@@ -104,13 +63,13 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./main.bicep
-          parameters: ./parameters/dev.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_DEV }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_DEV }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
+          parameters: ./parameters/dev.parameters.json 
           deploymentName: ${{ env.USER_ALIAS }}
           failOnStdErr: false
 
 
   deploy-uat:
-    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     needs: [build, deploy-dev]
     environment:
@@ -128,7 +87,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
-          parameters: ./parameters/uat.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_UAT }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_UAT }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
+          parameters: ./parameters/uat.parameters.json 
           deploymentName: ${{ env.USER_ALIAS }}
           failOnStdErr: false
 
@@ -151,5 +110,5 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
-          parameters: ./parameters/prod.parameters.json appServiceAPIEnvVarENV=${{ env.ENV }} appServiceAPIEnvVarDBHOST=${{ vars.DBHOST_PROD }} appServiceAPIEnvVarDBNAME=${{ vars.DBNAME_PROD }} appServiceAPIEnvVarDBPASS=${{ secrets.DBPASS }} appServiceAPIDBHostDBUSER=${{ secrets.DBUSER }} appServiceAPIDBHostFLASK_APP=${{ vars.FLASK_APP }} appServiceAPIDBHostFLASK_DEBUG=${{ vars.FLASK_DEBUG }}
+          parameters: ./parameters/prod.parameters.json
           failOnStdErr: false
