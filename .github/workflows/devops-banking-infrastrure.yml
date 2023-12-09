@@ -42,7 +42,7 @@ jobs:
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./key-vault.bicep
           parameters: ./parameters/key-vault.parameters.json location=${{ env.LOCATION }}
-          deploymentName: keyvaultacr-${{ github.run_id }}
+          deploymentName: keyvaultacr-${{ github.run_id }}.global
           failOnStdErr: false
 
   deploy-dev:
