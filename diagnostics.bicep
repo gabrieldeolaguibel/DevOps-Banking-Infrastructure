@@ -82,7 +82,7 @@ resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@20
   }
 }
 
-// Function to create diagnostic settings for Backend App Service (BE)
+/* // Function to create diagnostic settings for Backend App Service (BE)
 resource diagnosticSettingAppServiceApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [for env in ['dev', 'uat', 'prod']: {
   name: 'lemonke-be-${env}-diagnostics'
   properties: {
