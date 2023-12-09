@@ -13,7 +13,7 @@ resource appServicePlanProd 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-prod'
 }
 
-// Existing resources for Static Web Apps
+/* // Existing resources for Static Web Apps
 resource staticWebAppDev 'Microsoft.Web/staticSites@2021-02-01' existing = {
   name: 'lemonke-fe-dev'
 }
@@ -44,7 +44,7 @@ resource postgreSQLServerUat 'Microsoft.DBforPostgreSQL/servers@2017-12-01' exis
 }
 resource postgreSQLServerProd 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
   name: 'lemonke-dbsrv-prod'
-}
+} */
 
 
 // Function to create diagnostic settings for App Service Plan (ASP)
@@ -72,7 +72,7 @@ resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@
   scope: (env == 'dev') ? appServicePlanDev : (env == 'uat') ? appServicePlanUat : appServicePlanProd
 }]
 
-// Function to create diagnostic settings for Frontend
+/* // Function to create diagnostic settings for Frontend
 resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [for env in ['dev', 'uat', 'prod']: {
   name: 'lmonke-fe-${env}-diagnostics'
   properties: {
@@ -146,3 +146,4 @@ resource diagnosticSettingPostgreSQLServer 'Microsoft.Insights/diagnosticSetting
   }
   scope: (env == 'dev') ? postgreSQLServerDev : (env == 'uat') ? postgreSQLServerUat : postgreSQLServerProd
 }]
+ */
