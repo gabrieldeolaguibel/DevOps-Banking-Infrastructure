@@ -13,12 +13,12 @@
     },
     "sku": {
       "value": {
-          "capacity": 4,
-          "family": "S",
-          "name": "S1",
-          "size": "S1",
-          "tier": "Standard"
-        }
+        "capacity": 4,
+        "family": "S",
+        "name": "S1",
+        "size": "S1",
+        "tier": "Standard"
+      }
     },
     "appServicePlanName": {
       "value": "lemonke-asp-prod"
@@ -31,7 +31,9 @@
     },
     "appInsightsName": {
       "value": "lemonke-ai-prod"
+    },
+    "diagnosticsLogAnalyticsWorkspaceId": {
+      "value": "/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourcegroups/aguadamillas_students_2/providers/Microsoft.OperationalInsights/workspaces/c6beb6b8-b1fa-4c17-a6fe-628ae43e1fb6"
     }
   }
 }
-

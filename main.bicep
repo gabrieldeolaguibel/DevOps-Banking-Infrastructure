@@ -5,6 +5,8 @@ param location string
 param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
+param diagnosticsLogAnalyticsWorkspaceId string
+
 
 // Exisiting resources
 param resourceGroupName string = 'aguadamillas_students_1'
@@ -130,3 +132,11 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
+// Include the diagnostics module with dependencies
+module diagnostics './diagnostics.bicep' = {
+  name: 'diagnosticsDeployment-${uniqueString(resourceGroup().id)}'
+  scope: resourceGroup()
+  params: {
+    diagnosticsLogAnalyticsWorkspaceId: diagnosticsLogAnalyticsWorkspaceId
+  }
+}
