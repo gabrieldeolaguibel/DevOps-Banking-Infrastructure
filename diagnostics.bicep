@@ -2,9 +2,14 @@ param diagnosticsLogAnalyticsWorkspaceId string
 param metricsToEnable array = ['AllMetrics']
 
 // Existing resource for keyvault
-resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
   name: 'lemonke-keyvault' 
 }
+
+// Existing resource for ACR
+resource cr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
+  name: 'lemonkecr'
+ }
 
 // Existing resources for App Service Plan (ASP)
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
@@ -59,6 +64,27 @@ resource keyVaultDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-0
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
     logs: [{
       category: 'AuditEvent'
+      enabled: true
+    }]
+    metrics: [for metric in metricsToEnable: {
+      category: metric
+      enabled: true
+    }]
+  }
+}
+
+// Function to create diagnostic settings for CR
+resource ACRDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'lmonkecr-diagnostics'
+  scope: cr
+  properties: {
+    workspaceId: diagnosticsLogAnalyticsWorkspaceId
+    logs: [{
+      category: 'ContainerRegistryLoginEvents'
+      enabled: true
+    }
+    {
+      category: 'ContainerRegistryRepositoryEvents' 
       enabled: true
     }]
     metrics: [for metric in metricsToEnable: {
