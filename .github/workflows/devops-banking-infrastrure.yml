@@ -17,7 +17,7 @@ env:
   SUBSCRIPTION_ID_DEV: e0b9cada-61bc-4b5a-bd7a-52c606726b3b
   SUBSCRIPTION_ID_UAT: e0b9cada-61bc-4b5a-bd7a-52c606726b3b
   USER_ALIAS: barbie
-  LOCATION: Norway East
+  LOCATION: centralus
 
 jobs:
   build:
