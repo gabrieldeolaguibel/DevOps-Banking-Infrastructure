@@ -2,17 +2,14 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "location": {
-      "value": "Korea Central"
-    },
     "postgreSQLServerName": {
-      "value": "monke-dbsrv-uat"
+      "value": "barbie-dbsrv-uat"
     },
     "postgreSQLDatabaseName": {
-      "value": "monke-db-uat"
+      "value": "barbie-db-uat"
     },
     "staticWebAppName": {
-      "value": "monke-fe-uat"
+      "value": "barbie-fe-uat"
     },
     "sku": {
       "value": {
@@ -24,13 +21,13 @@
         }
     },
     "appServicePlanName": {
-      "value": "monke-asp-uat"
+      "value": "barbie-asp-uat"
     },
     "appServiceAppName": {
-      "value": "monke-be-uat"
+      "value": "barbie-be-uat"
     },
     "appInsightsName": {
-      "value": "monke-ai-uat"
+      "value": "barbie-ai-uat"
     },
     "azureMonitorName": {
       "value": "dummy-value"

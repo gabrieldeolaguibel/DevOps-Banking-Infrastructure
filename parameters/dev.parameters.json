@@ -3,16 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "value": "Korea Central"
+      "value": "Norway East"
     },
     "postgreSQLServerName": {
-      "value": "monke-dbsrv-dev"
+      "value": "barbie-dbsrv-dev"
     },
     "postgreSQLDatabaseName": {
-      "value": "monke-db-dev"
+      "value": "barbie-db-dev"
     },
     "staticWebAppName": {
-      "value": "monke-fe-dev"
+      "value": "barbie-fe-dev"
     },
     "sku": {
       "value": {
@@ -24,16 +24,16 @@
         }
     },
     "appServicePlanName": {
-      "value": "monke-asp-dev"
+      "value": "barbie-asp-dev"
     },
     "appServiceAppName": {
-      "value": "monke-be-dev"
+      "value": "barbie-be-dev"
     },
     "appInsightsName": {
-      "value": "monke-ai-dev"
+      "value": "barbie-ai-dev"
     },
     "azureMonitorName": {
-      "value": "dummy-value"
+      "value": "barbie-value"
     }
   }
 }

@@ -3,13 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "keyVaultName": {
-        "value": "monke-keyvault"
+        "value": "barbie-keyvault"
       },
       "containerRegistryName": {
-        "value": "monkecr"
-      },
-      "location": {
-        "value": "Korea Central"
+        "value": "barbie"
       }
     }
   }
