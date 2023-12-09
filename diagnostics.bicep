@@ -6,13 +6,14 @@ param metricsToEnable array = ['AllMetrics']
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-dev'
 }
-resource appServicePlanUat 'Microsoft.Web/serverfarms@2021-02-01' existing = {
+/* resource appServicePlanUat 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-uat'
 }
 resource appServicePlanProd 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-prod'
 }
-
+ */
+ 
 /* // Existing resources for Static Web Apps
 resource staticWebAppDev 'Microsoft.Web/staticSites@2021-02-01' existing = {
   name: 'lemonke-fe-dev'
@@ -47,30 +48,39 @@ resource postgreSQLServerProd 'Microsoft.DBforPostgreSQL/servers@2017-12-01' exi
 } */
 
 
-// Function to create diagnostic settings for App Service Plan (ASP)
+/* // Function to create diagnostic settings for App Service Plan (ASP)
 resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [for env in ['dev', 'uat', 'prod']: {
   name: 'lemonke-asp-${env}-diagnostics'
+  scope: (env == 'dev') ? appServicePlanDev : (env == 'uat') ? appServicePlanUat : appServicePlanProd
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
     logs: [for log in logsToEnable: {
       category: log
       enabled: true
-      retentionPolicy: {
-        enabled: true
-        days: 30
-      }
     }]
     metrics: [for metric in metricsToEnable: {
       category: metric
       enabled: true
-      retentionPolicy: {
-        enabled: true
-        days: 30
-      }
     }]
   }
-  scope: (env == 'dev') ? appServicePlanDev : (env == 'uat') ? appServicePlanUat : appServicePlanProd
-}]
+}] */
+
+resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'lemonke-asp-dev-diagnostics'
+  scope: appServicePlanDev
+  properties: {
+    workspaceId: diagnosticsLogAnalyticsWorkspaceId
+    logs: [for log in logsToEnable: {
+      category: log
+      enabled: true
+    }]
+    metrics: [for metric in metricsToEnable: {
+      category: metric
+      enabled: true
+    }]
+  }
+}
+
 
 /* // Function to create diagnostic settings for Frontend
 resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [for env in ['dev', 'uat', 'prod']: {
