@@ -36,7 +36,7 @@ resource appServiceAppProd 'Microsoft.Web/sites@2021-02-01' existing = {
 } */
 
 // Existing resources for PostgreSQL
-resource postgreSQLServerDev 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
+resource postgreSQLServerDev 'Microsoft.DBforPostgreSQL/flexibleservers@2021-06-01' existing = {
   name: 'lemonke-dbsrv-dev'
 }
 /* resource postgreSQLServerUat 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
