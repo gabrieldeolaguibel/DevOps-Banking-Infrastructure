@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "postgreSQLServerName": {
-      "value": "monke-dbsrv-dev"
+      "value": "lemonke-dbsrv-dev"
     },
     "postgreSQLDatabaseName": {
-      "value": "monke-db-dev"
+      "value": "lemonke-db-dev"
     },
     "staticWebAppName": {
-      "value": "monke-fe-dev"
+      "value": "lemonke-fe-dev"
     },
     "sku": {
       "value": {
@@ -21,13 +21,13 @@
         }
     },
     "appServicePlanName": {
-      "value": "monke-asp-dev"
+      "value": "lemonke-asp-dev"
     },
     "appServiceAppName": {
-      "value": "monke-be-dev"
+      "value": "lemonke-be-dev"
     },
     "appInsightsName": {
-      "value": "monke-ai-dev"
+      "value": "lemonke-ai-dev"
     },
     "azureMonitorName": {
       "value": "dummy-value"

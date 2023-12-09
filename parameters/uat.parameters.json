@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "postgreSQLServerName": {
-      "value": "monke-dbsrv-uat"
+      "value": "lemonke-dbsrv-uat"
     },
     "postgreSQLDatabaseName": {
-      "value": "monke-db-uat"
+      "value": "lemonke-db-uat"
     },
     "staticWebAppName": {
-      "value": "monke-fe-uat"
+      "value": "lemonke-fe-uat"
     },
     "sku": {
       "value": {
@@ -21,13 +21,13 @@
         }
     },
     "appServicePlanName": {
-      "value": "monke-asp-uat"
+      "value": "lemonke-asp-uat"
     },
     "appServiceAppName": {
-      "value": "monke-be-uat"
+      "value": "lemonke-be-uat"
     },
     "appInsightsName": {
-      "value": "monke-ai-uat"
+      "value": "lemonke-ai-uat"
     },
     "azureMonitorName": {
       "value": "dummy-value"
