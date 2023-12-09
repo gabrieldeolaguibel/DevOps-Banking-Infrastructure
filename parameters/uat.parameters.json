@@ -31,6 +31,9 @@
     },
     "appInsightsName": {
       "value": "monke-ai-uat"
+    },
+    "azureMonitorName": {
+      "value": "dummy-value"
     }
   }
 }
