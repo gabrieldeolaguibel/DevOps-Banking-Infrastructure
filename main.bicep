@@ -7,19 +7,20 @@ param postgreSQLServerName string
 param postgreSQLDatabaseName string
 
 // Exisiting resources
+param resourceGroupName string = 'aguadamillas_students_1'
 
 param keyVaultName string = 'lemonke-kv'
 //key vault reference
 resource keyvault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
+  scope: resourceGroup(resourceGroupName)
   name: keyVaultName
-  scope: resourceGroup(keyVaultName)
  }
 
 // Azure Container Registry module
 param containerRegistryName string = 'lemonkecr'
 resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
+  scope: resourceGroup(resourceGroupName)
   name: containerRegistryName
-  scope: resourceGroup(containerRegistryName)
  }
 
  // Static web app for front end
