@@ -33,7 +33,7 @@
       "value": "dummy-value"
     },
     "diagnosticsLogAnalyticsWorkspaceId": {
-      "value": "/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourcegroups/aguadamillas_students_2/providers/Microsoft.OperationalInsights/workspaces/c6beb6b8-b1fa-4c17-a6fe-628ae43e1fb6"
+      "value": "/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourcegroups/aguadamillas_students_2/providers/Microsoft.OperationalInsights/workspaces/lmonke-am"
     }
   }
 }
