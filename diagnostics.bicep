@@ -24,22 +24,22 @@ resource staticWebAppProd 'Microsoft.Web/staticSites@2021-02-01' existing = {
   name: 'lemonke-fe-prod'
 } */
 
-/* // Existing resources for App Service App - Backend
+// Existing resources for App Service App - Backend
 resource appServiceAppDev 'Microsoft.Web/sites@2021-02-01' existing = {
   name: 'lemonke-be-dev'
 }
-resource appServiceAppUat 'Microsoft.Web/sites@2021-02-01' existing = {
+/*resource appServiceAppUat 'Microsoft.Web/sites@2021-02-01' existing = {
   name: 'lemonke-be-uat'
 }
 resource appServiceAppProd 'Microsoft.Web/sites@2021-02-01' existing = {
   name: 'lemonke-be-prod'
-}
+} */
 
 // Existing resources for PostgreSQL
 resource postgreSQLServerDev 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
   name: 'lemonke-dbsrv-dev'
 }
-resource postgreSQLServerUat 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
+/* resource postgreSQLServerUat 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
   name: 'lemonke-dbsrv-uat'
 }
 resource postgreSQLServerProd 'Microsoft.DBforPostgreSQL/servers@2017-12-01' existing = {
@@ -65,7 +65,7 @@ resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@
 } */
 
 
-// Function to create diagnostic settings for Frontend
+// Function to create diagnostic settings for Frontend Static App -> logs are not activated as it costs money!
 resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'lmonke-fe-dev-diagnostics'
   scope: staticWebAppDev
@@ -78,53 +78,37 @@ resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@20
   }
 }
 
-/* // Function to create diagnostic settings for Backend App Service (BE)
-resource diagnosticSettingAppServiceApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [for env in ['dev', 'uat', 'prod']: {
-  name: 'lemonke-be-${env}-diagnostics'
+// Function to create diagnostic settings for Backend App Service (BE)
+resource diagnosticSettingAppServiceApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' =  {
+  name: 'lemonke-be-dev-diagnostics'
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    logs: [for log in logsToEnable: {
-      category: log
+    logs: [{
+      category: 'AppServiceHTTPLogs'
       enabled: true
-      retentionPolicy: {
-        enabled: true
-        days: 30
-      }
     }]
     metrics: [for metric in metricsToEnable: {
       category: metric
       enabled: true
-      retentionPolicy: {
-        enabled: true
-        days: 30
-      }
     }]
   }
-  scope: (env == 'dev') ? appServiceAppDev : (env == 'uat') ? appServiceAppUat : appServiceAppProd
-}]
+  scope: appServiceAppDev
+}
 
 // Azure Database for PostgreSQL
-resource diagnosticSettingPostgreSQLServer 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [for env in ['dev', 'uat', 'prod']: {
-  name: '${env}-postgresql-diagnostics'
+resource diagnosticSettingPostgreSQLServer 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '$dev-postgresql-diagnostics'
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    logs: [for log in logsToEnable: {
-      category: log
+    logs: [{
+      category: 'PostgreSQLLogs'
       enabled: true
-      retentionPolicy: {
-        enabled: true
-        days: 30
-      }
     }]
     metrics: [for metric in metricsToEnable: {
       category: metric
       enabled: true
-      retentionPolicy: {
-        enabled: true
-        days: 30
-      }
     }]
   }
-  scope: (env == 'dev') ? postgreSQLServerDev : (env == 'uat') ? postgreSQLServerUat : postgreSQLServerProd
-}]
- */
+  scope: postgreSQLServerDev
+}
+
