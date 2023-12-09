@@ -8,14 +8,14 @@ param postgreSQLDatabaseName string
 
 // Exisiting resources
 
-param keyVaultName string = 'lemonke-keyvault'
+param keyVaultName string = 'lemonke-kv'
 //key vault reference
 resource keyvault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
   name: keyVaultName
  }
 
 // Azure Container Registry module
-param containerRegistryName string = 'lemonke'
+param containerRegistryName string = 'lemonkecr'
 resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
   name: containerRegistryName
  }
