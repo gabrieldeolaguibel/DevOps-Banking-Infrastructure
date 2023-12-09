@@ -14,7 +14,7 @@ resource appServicePlanProd 'Microsoft.Web/serverfarms@2021-02-01' existing = {
  */
  
 // Existing resources for Static Web Apps
-resource staticWebAppDev 'Microsoft.Web/staticSites@2021-02-01' existing = {
+resource staticWebAppDev 'Microsoft.Web/staticsites@2021-02-01' existing = {
   name: 'lemonke-fe-dev'
 }
 /* resource staticWebAppUat 'Microsoft.Web/staticSites@2021-02-01' existing = {
@@ -71,10 +71,6 @@ resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@20
   scope: staticWebAppDev
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    logs: [{
-      category: 'StaticSiteHttpLogs'
-      enabled: true
-    }]
     metrics: [for metric in metricsToEnable: {
       category: metric
       enabled: true
