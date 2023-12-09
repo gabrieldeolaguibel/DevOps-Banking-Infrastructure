@@ -3,7 +3,7 @@ param metricsToEnable array = ['AllMetrics']
 
 // Existing resource for keyvault
 resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
-  name: 'lemonke-keyvault' 
+  name: 'lemonke-kv' 
 }
 
 // Existing resource for ACR
