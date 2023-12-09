@@ -2,32 +2,36 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "environmentType": {
-      "value": "prod"
-    },
     "postgreSQLServerName": {
-      "value": "monke-dbsrv-prod"
+      "value": "lemonke-dbsrv-prod"
     },
     "postgreSQLDatabaseName": {
-      "value": "monke-db-prod"
+      "value": "lemonke-db-prod"
+    },
+    "staticWebAppName": {
+      "value": "lemonke-fe-prod"
+    },
+    "sku": {
+      "value": {
+          "capacity": 4,
+          "family": "S",
+          "name": "S1",
+          "size": "S1",
+          "tier": "Standard"
+        }
     },
     "appServicePlanName": {
-      "value": "monke-asp-prod"
-    },
-    "appServiceAPIAppName": {
-      "value": "monke-be-prod"
+      "value": "lemonke-asp-prod"
     },
     "appServiceAppName": {
-      "value": "monke-fe-prod"
+      "value": "lemonke-be-prod"
     },
     "azureMonitorName": {
-      "value": "monke-am"
+      "value": "lemonke-am"
     },
     "appInsightsName": {
-      "value": "monke-ai-prod"
-    },
-    "location": {
-      "value": "Korea Central"
+      "value": "lemonke-ai-prod"
     }
   }
 }
+

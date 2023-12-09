@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "keyVaultName": {
-        "value": "monke-keyvault"
+        "value": "lemonke-kv"
       },
-      "location": {
-        "value": "Korea Central"
+      "containerRegistryName": {
+        "value": "lemonkecr"
       }
     }
   }
