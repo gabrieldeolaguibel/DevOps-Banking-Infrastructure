@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "postgreSQLServerName": {
-      "value": "barbie-dbsrv-uat"
+      "value": "monke-dbsrv-uat"
     },
     "postgreSQLDatabaseName": {
-      "value": "barbie-db-uat"
+      "value": "monke-db-uat"
     },
     "staticWebAppName": {
-      "value": "barbie-fe-uat"
+      "value": "monke-fe-uat"
     },
     "sku": {
       "value": {
@@ -21,13 +21,13 @@
         }
     },
     "appServicePlanName": {
-      "value": "barbie-asp-uat"
+      "value": "monke-asp-uat"
     },
     "appServiceAppName": {
-      "value": "barbie-be-uat"
+      "value": "monke-be-uat"
     },
     "appInsightsName": {
-      "value": "barbie-ai-uat"
+      "value": "monke-ai-uat"
     },
     "azureMonitorName": {
       "value": "dummy-value"

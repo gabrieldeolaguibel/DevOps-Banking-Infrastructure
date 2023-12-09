@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "keyVaultName": {
-        "value": "barbie-keyvault"
+        "value": "monke-keyvault"
       },
       "containerRegistryName": {
-        "value": "barbie"
+        "value": "monke"
       }
     }
   }
