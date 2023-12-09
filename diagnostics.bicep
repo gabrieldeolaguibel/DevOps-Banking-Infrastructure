@@ -1,6 +1,11 @@
 param diagnosticsLogAnalyticsWorkspaceId string
 param metricsToEnable array = ['AllMetrics']
 
+// Existing resource for keyvault
+resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = {
+  name: 'lemonke-keyvault' 
+}
+
 // Existing resources for App Service Plan (ASP)
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-dev'
@@ -46,6 +51,22 @@ resource postgreSQLServerProd 'Microsoft.DBforPostgreSQL/servers@2017-12-01' exi
   name: 'lemonke-dbsrv-prod'
 } */
 
+// Function to create diagnostic settings for KeyVault
+resource keyVaultDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'keyvault-diagnostics'
+  scope: keyVault
+  properties: {
+    workspaceId: diagnosticsLogAnalyticsWorkspaceId
+    logs: [{
+      category: 'AuditEvent'
+      enabled: true
+    }]
+    metrics: [for metric in metricsToEnable: {
+      category: metric
+      enabled: true
+    }]
+  }
+}
 
 // Function to create diagnostic settings for App Service Plan (ASP) -> There are no logs for ASP
 resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
@@ -59,7 +80,6 @@ resource diagnosticSettingAppServicePlan 'Microsoft.Insights/diagnosticSettings@
     }]
   }
 }
-
 
 // Function to create diagnostic settings for Frontend Static App -> logs are not activated as it costs money!
 resource diagnosticSettingStaticWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
