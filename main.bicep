@@ -84,7 +84,6 @@ module webApp './modules/web/site/main.bicep' = {
   dependsOn: [
     servicePlan
     acr
-    keyvault
     dbForPostgreSQL
   ]
   params: {
