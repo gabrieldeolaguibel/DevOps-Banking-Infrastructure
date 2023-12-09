@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "keyVaultName": {
-        "value": "lemonke-keyvault"
+        "value": "lemonke-kv"
       },
       "containerRegistryName": {
-        "value": "lemonke"
+        "value": "lemonkecr"
       }
     }
   }
