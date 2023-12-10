@@ -4,10 +4,6 @@ resource appServicePlanProd 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-prod'
 }
 
-resource staticWebAppProd 'Microsoft.Web/staticSites@2021-02-01' existing = {
-  name: 'lemonke-fe-prod'
-}
-
 resource appServiceAppProd 'Microsoft.Web/sites@2021-02-01' existing = {
   name: 'lemonke-be-prod'
 }
@@ -20,19 +16,6 @@ resource postgreSQLServerProd 'Microsoft.DBforPostgreSQL/flexibleservers@2021-06
 resource diagnosticSettingAppServicePlanPROD 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'lemonke-asp-prod-diagnostics'
   scope: appServicePlanProd
-  properties: {
-    workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    metrics: [{
-      category: 'AllMetrics'
-      enabled: true
-    }]
-  }
-}
-
-// Function to create diagnostic settings for Frontend Static App PROD -> logs are not activated as it costs money!
-resource diagnosticSettingStaticWebAppPROD 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'lmonke-fe-prod-diagnostics'
-  scope: staticWebAppProd
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
     metrics: [{

@@ -4,10 +4,6 @@ resource appServicePlanUat 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-uat'
 }
 
-resource staticWebAppUat 'Microsoft.Web/staticSites@2021-02-01' existing = {
-  name: 'lemonke-fe-uat'
-}
-
 resource appServiceAppUat 'Microsoft.Web/sites@2021-02-01' existing = {
   name: 'lemonke-be-uat'
 }
@@ -30,18 +26,6 @@ resource diagnosticSettingAppServicePlanUAT 'Microsoft.Insights/diagnosticSettin
   }
 }
 
-// Function to create diagnostic settings for Frontend Static App UAT -> logs are not activated as it costs money!
-resource diagnosticSettingStaticWebAppUAT 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'lmonke-fe-uat-diagnostics'
-  scope: staticWebAppUat
-  properties: {
-    workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    metrics: [{
-      category: 'AllMetrics'
-      enabled: true
-    }]
-  }
-}
 
 // Function to create diagnostic settings for Backend App Service UAT (BE)
 resource diagnosticSettingAppServiceAppUAT 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' =  {

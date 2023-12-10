@@ -6,10 +6,6 @@ resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-dev'
 }
 
-resource staticWebAppDev 'Microsoft.Web/staticsites@2021-02-01' existing = {
-  name: 'lemonke-fe-dev'
-}
-
 resource appServiceAppDev 'Microsoft.Web/sites@2021-02-01' existing = {
   name: 'lemonke-be-dev'
 }
@@ -61,50 +57,6 @@ resource appServicePlanCpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   }
 }
 
-
-// Function to create diagnostic settings for Frontend Static App DEV-> logs are not activated as it costs money!
-resource diagnosticSettingStaticWebAppDEV 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'lmonke-fe-dev-diagnostics'
-  scope: staticWebAppDev
-  properties: {
-    workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    metrics: [{
-      category: 'AllMetrics'
-      enabled: true
-    }]
-  }
-}
-
-resource staticWebAppErrorRateAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'alert-lemonke-fe-dev'
-  location: location
-  properties: {
-    description: 'Alert when HTTP error rate is over 1%'
-    severity: 3
-    enabled: true
-    scopes: [
-      staticWebAppDev.id
-    ]
-    criteria: {
-      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
-      allOf: [
-        {
-          name: 'alert-lemonke-fe-dev'
-          criterionType: 'StaticThresholdCriterion'
-          metricName: 'Http5xx'
-          metricNamespace: 'Microsoft.Web/staticsites'
-          operator: 'GreaterThan'
-          threshold: 1
-          timeAggregation: 'Total'
-        }
-      ]
-    }
-    windowSize: 'P30D' // 30-day window
-    evaluationFrequency: 'PT1H' // Evaluate hourly
-  }
-}
-
-
 // Function to create diagnostic settings for Backend App Service DEV (BE)
 resource diagnosticSettingAppServiceAppDEV 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' =  {
   name: 'lemonke-be-dev-diagnostics'
@@ -138,7 +90,7 @@ resource appServiceResponseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01
         {
           name: 'alert-lemonke-be-dev'
           criterionType: 'StaticThresholdCriterion'
-          metricName: 'HttpQueueLength'
+          metricName: 'AverageResponseTime'
           metricNamespace: 'Microsoft.Web/sites'
           operator: 'GreaterThan'
           threshold: 200
