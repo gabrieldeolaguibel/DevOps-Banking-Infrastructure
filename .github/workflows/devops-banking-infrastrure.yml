@@ -96,6 +96,8 @@ jobs:
       name: "User Acceptance Testing"
     env:
       ENV: uat
+      DBHOST: lemonke-dbsrv-uat.postgres.database.azure.com
+      DBNAME: lemonke-db-uat
     steps:
       - uses: actions/checkout@main
       - uses: azure/login@v1
@@ -107,7 +109,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
-          parameters: ./parameters/uat.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }}
+          parameters: ./parameters/uat.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }} DBPASS=${{ secrets.DBPASS }} DBUSER=${{ secrets.DBUSER }} DBHOST=${{ env.DBHOST }} DBNAME=${{ env.DBNAME }} ENV=${{ env.ENV }}
           deploymentName: ${{ env.USER_ALIAS }}.${{ github.run_id }}.uat
           failOnStdErr: false
       - name: Deploy UAT Diagnostics
@@ -128,6 +130,8 @@ jobs:
       name: "Production"
     env:
       ENV: prod
+      DBHOST: lemonke-dbsrv-prod.postgres.database.azure.com
+      DBNAME: lemonke-db-prod
     steps:
       - uses: actions/checkout@main
       - uses: azure/login@v1
@@ -139,8 +143,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
-          parameters: ./parameters/prod.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }}
-          deploymentName: ${{ env.USER_ALIAS }}.${{ github.run_id }}.prod
+          parameters: ./parameters/prod.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }} DBPASS=${{ secrets.DBPASS }} DBUSER=${{ secrets.DBUSER }} DBHOST=${{ env.DBHOST }} DBNAME=${{ env.DBNAME }} ENV=${{ env.ENV }}
           failOnStdErr: false
       - name: Deploy PROD Diagnostics
         uses: azure/arm-deploy@v1
