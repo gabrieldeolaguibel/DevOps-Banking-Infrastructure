@@ -37,6 +37,13 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
     repositoryToken: githubToken
     repositoryUrl: githubRepo
     branch: 'main'
+    buildProperties: {
+      appLocation: '/'
+      apiLocation: ''
+      outputLocation: ''
+      appArtifactLocation: ''
+      apiArtifactLocation: ''
+    }
   }
 }
 
@@ -88,6 +95,12 @@ param containerRegistryImageVersion string = 'latest'
 param appServiceAppName string // backend app hosting 
 param keyVaultSecretNameACRUsername string = 'acr-username'
 param keyVaultSecretNameACRPassword1 string = 'acr-password1'
+
+param DBHOST string
+param DBUSER string
+param DBPASS string
+param DBNAME string
+
 module webApp './modules/web/site/main.bicep' = {
   name: appServiceAppName
   dependsOn: [
@@ -106,6 +119,13 @@ module webApp './modules/web/site/main.bicep' = {
     }
     appSettingsKeyValuePairs: {
       WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
+      ENV: ENV
+      DBHOST: DBHOST
+      DBUSER: DBUSER
+      DBPASS: DBPASS
+      DBNAME: DBNAME
+      FLASK_APP: 'app.py'
+      FLASK_DEBUG: '1'
     }
     dockerRegistryServerUrl: 'https://${containerRegistryName}.azurecr.io'
     dockerRegistryServerUserName: keyvault.getSecret(keyVaultSecretNameACRUsername)
