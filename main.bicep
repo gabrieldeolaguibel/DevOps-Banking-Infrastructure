@@ -119,16 +119,14 @@ module webApp './modules/web/site/main.bicep' = {
   }
 }
 
-param apiName string
-
 module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
-  name: apiName
+  name: appServiceAppName
   params: {
-    name: apiName
+    name: appServiceAppName
     location: location
     region: location
     staticSiteName: staticWebAppName
-    backendResourceId: appServiceAppName
+    backendResourceId: webApp.outputs.resourceId
   }
   dependsOn: [
     staticWebApp
