@@ -47,7 +47,7 @@ resource keyVaultLatencyAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
         {
           name: 'alert-lemonke-kv'
           criterionType: 'StaticThresholdCriterion'
-          metricName: 'OverallServiceApiLatency'
+          metricName: 'ServiceApiLatency'
           metricNamespace: 'Microsoft.KeyVault/vaults'
           operator: 'GreaterThan'
           threshold: 100
