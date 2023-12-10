@@ -1,5 +1,4 @@
-param diagnosticsLogAnalyticsWorkspaceId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourcegroups/aguadamillas_students_2/providers/microsoft.operationalinsights/workspaces/lemonke-am'
-param metricsToEnable array = ['AllMetrics']
+param diagnosticsLogAnalyticsWorkspaceId string
 
 resource appServicePlanUat 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-uat'
@@ -24,8 +23,8 @@ resource diagnosticSettingAppServicePlanUAT 'Microsoft.Insights/diagnosticSettin
   scope: appServicePlanUat
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    metrics: [for metric in metricsToEnable: {
-      category: metric
+    metrics: [{
+      category: 'AllMetrics'
       enabled: true
     }]
   }
@@ -37,8 +36,8 @@ resource diagnosticSettingStaticWebAppUAT 'Microsoft.Insights/diagnosticSettings
   scope: staticWebAppUat
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    metrics: [for metric in metricsToEnable: {
-      category: metric
+    metrics: [{
+      category: 'AllMetrics'
       enabled: true
     }]
   }
@@ -54,8 +53,8 @@ resource diagnosticSettingAppServiceAppUAT 'Microsoft.Insights/diagnosticSetting
       category: 'AppServiceHTTPLogs'
       enabled: true
     }]
-    metrics: [for metric in metricsToEnable: {
-      category: metric
+    metrics: [{
+      category: 'AllMetrics'
       enabled: true
     }]
   }
@@ -71,8 +70,8 @@ resource diagnosticSettingPostgreSQLServerUAT 'Microsoft.Insights/diagnosticSett
       category: 'PostgreSQLLogs'
       enabled: true
     }]
-    metrics: [for metric in metricsToEnable: {
-      category: metric
+    metrics: [{
+      category: 'AllMetrics'
       enabled: true
     }]
   }
