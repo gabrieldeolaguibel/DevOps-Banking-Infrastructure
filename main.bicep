@@ -36,6 +36,13 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
     repositoryToken: githubToken
     repositoryUrl: githubRepo
     branch: 'main'
+    buildProperties: {
+      appLocation: '/'
+      apiLocation: ''
+      outputLocation: ''
+      appArtifactLocation: ''
+      apiArtifactLocation: ''
+    }
   }
 }
 
@@ -110,6 +117,23 @@ module webApp './modules/web/site/main.bicep' = {
     dockerRegistryServerUserName: keyvault.getSecret(keyVaultSecretNameACRUsername)
     dockerRegistryServerPassword: keyvault.getSecret(keyVaultSecretNameACRPassword1)
   }
+}
+
+param apiName string
+
+module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
+  name: apiName
+  params: {
+    name: apiName
+    location: location
+    region: location
+    staticSiteName: staticWebAppName
+    backendResourceId: appServiceAppName
+  }
+  dependsOn: [
+    staticWebApp
+    webApp
+  ]
 }
 
 // Monitoring Parameters
