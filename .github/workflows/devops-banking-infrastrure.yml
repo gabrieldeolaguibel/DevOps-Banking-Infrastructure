@@ -51,7 +51,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./kv-diagnostics.bicep
-          parameters: ./parameters/key-vault.parameters.json location=${{ env.LOCATION }}
+          parameters: ./parameters/key-vault.parameters.json
           deploymentName: diagnostics-${{ github.run_id }}.global
           failOnStdErr: false
 
@@ -83,7 +83,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
           template: ./dev-diagnostics.bicep
-          parameters: ./parameters/dev.parameters.json location=${{ env.LOCATION }}
+          parameters: ./parameters/dev.parameters.json
           deploymentName: diagnostics-${{ github.run_id }}.dev
           failOnStdErr: false
 
@@ -115,7 +115,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./uat-diagnostics.bicep
-          parameters: ./parameters/uat.parameters.json location=${{ env.LOCATION }}
+          parameters: ./parameters/uat.parameters.json
           deploymentName: diagnostics-${{ github.run_id }}.uat
           failOnStdErr: false
 
@@ -147,6 +147,6 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./prod-diagnostics.bicep
-          parameters: ./parameters/prod.parameters.json location=${{ env.LOCATION }}
+          parameters: ./parameters/prod.parameters.json
           deploymentName: diagnostics-${{ github.run_id }}.prod
           failOnStdErr: false
