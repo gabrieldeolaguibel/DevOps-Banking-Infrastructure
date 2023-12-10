@@ -1,7 +1,8 @@
 param diagnosticsLogAnalyticsWorkspaceId string
 param location string = 'global'
-param actionGroupId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourceGroups/aguadamillas_students_2/providers/Microsoft.Logic/workflows/lemonke-slack'
-
+param actionGroupId string
+param resourceId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourceGroups/aguadamillas_students_2/providers/Microsoft.Logic/workflows/lemonke-slack'
+param slackWebhookUrl string = 'https://hooks.slack.com/services/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'
 
 // Existing resource for keyvault
 resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
@@ -13,6 +14,31 @@ resource cr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
   name: 'lemonkecr'
  }
 
+ // Define the Action Group
+resource actionGroup 'Microsoft.Insights/actionGroups@2022-06-01' = {
+  name: 'lmonke-ag-kv'
+  location: 'global'
+  properties: {
+    groupShortName: 'lmonke-ag-kv'
+    enabled: true
+    armRoleReceivers: []
+    azureAppPushReceivers: []
+    azureFunctionReceivers: []
+    emailReceivers: []
+    itsmReceivers: []
+    logicAppReceivers: [
+      {
+        name: 'SendToSlack'
+        resourceId: resourceId
+        useCommonAlertSchema: true
+        callbackUrl: slackWebhookUrl
+      }
+    ]
+    smsReceivers: []
+    voiceReceivers: []
+    webhookReceivers: []
+  }
+}
 
  // Function to create diagnostic settings for KeyVault
 resource keyVaultDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {

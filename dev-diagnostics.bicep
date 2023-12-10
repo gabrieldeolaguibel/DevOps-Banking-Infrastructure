@@ -1,6 +1,8 @@
 param diagnosticsLogAnalyticsWorkspaceId string
 param location string = 'global'
-param actionGroupId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourceGroups/aguadamillas_students_2/providers/Microsoft.Logic/workflows/lemonke-slack'
+param actionGroupId string
+param resourceId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourceGroups/aguadamillas_students_2/providers/Microsoft.Logic/workflows/lemonke-slack'
+param slackWebhookUrl string = 'https://hooks.slack.com/services/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'
 
 
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
@@ -13,6 +15,32 @@ resource appServiceAppDev 'Microsoft.Web/sites@2021-02-01' existing = {
 
 resource postgreSQLServerDev 'Microsoft.DBforPostgreSQL/flexibleservers@2021-06-01' existing = {
   name: 'lemonke-dbsrv-dev'
+}
+
+// Define the Action Group
+resource actionGroup 'Microsoft.Insights/actionGroups@2022-06-01' = {
+  name: 'lmonke-ag'
+  location: 'global'
+  properties: {
+    groupShortName: 'lmonke-ag'
+    enabled: true
+    armRoleReceivers: []
+    azureAppPushReceivers: []
+    azureFunctionReceivers: []
+    emailReceivers: []
+    itsmReceivers: []
+    logicAppReceivers: [
+      {
+        name: 'SendToSlack'
+        resourceId: resourceId
+        useCommonAlertSchema: true
+        callbackUrl: slackWebhookUrl
+      }
+    ]
+    smsReceivers: []
+    voiceReceivers: []
+    webhookReceivers: []
+  }
 }
 
 
