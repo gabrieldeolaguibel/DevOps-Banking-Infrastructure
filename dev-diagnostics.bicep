@@ -1,5 +1,5 @@
 param diagnosticsLogAnalyticsWorkspaceId string
-param location string = 'westus2'
+param location string = 'global'
 
 
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
@@ -163,10 +163,30 @@ resource diagnosticSettingPostgreSQLServerDEV 'Microsoft.Insights/diagnosticSett
   }
 }
 
-resource postgreSQLPerformanceAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'PostgreSQLPerformanceAlert-dev'
+resource postgreSQLCpuUtilizationAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'PostgreSQLCpuUtilizationAlert-dev'
+  location: location
   properties: {
-    // Alert properties...
+    description: 'Alert when CPU utilization is over 70%'
+    severity: 3
+    enabled: true
+    scopes: [
+      postgreSQLServerDev.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          metricName: 'cpu_percent'
+          metricNamespace: 'Microsoft.DBforPostgreSQL/flexibleservers'
+          operator: 'GreaterThan'
+          threshold: 70
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+    windowSize: 'PT5M'
+    evaluationFrequency: 'PT1M'
   }
 }
  */
