@@ -1,5 +1,5 @@
 param diagnosticsLogAnalyticsWorkspaceId string
-param location string
+param location string = 'westus2'
 
 
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
@@ -73,10 +73,30 @@ resource diagnosticSettingStaticWebAppDEV 'Microsoft.Insights/diagnosticSettings
   }
 }
 
-resource staticWebAppErrorAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'StaticWebAppErrorAlert-dev'
+resource staticWebAppErrorRateAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'StaticWebAppErrorRateAlert-dev'
+  location: location
   properties: {
-    // Alert properties...
+    description: 'Alert when HTTP error rate is over 1%'
+    severity: 3
+    enabled: true
+    scopes: [
+      staticWebAppDev.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          metricName: 'Http5xx'
+          metricNamespace: 'Microsoft.Web/staticsites'
+          operator: 'GreaterThan'
+          threshold: 1
+          timeAggregation: 'Total'
+        }
+      ]
+    }
+    windowSize: 'P30D' // 30-day window
+    evaluationFrequency: 'PT1H' // Evaluate hourly
   }
 }
 
@@ -100,8 +120,28 @@ resource diagnosticSettingAppServiceAppDEV 'Microsoft.Insights/diagnosticSetting
 
 resource appServiceResponseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: 'AppServiceResponseTimeAlert-dev'
+  location: location
   properties: {
-    // Alert properties...
+    description: 'Alert when average response time is over 200ms'
+    severity: 3
+    enabled: true
+    scopes: [
+      appServiceAppDev.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          metricName: 'HttpQueueLength'
+          metricNamespace: 'Microsoft.Web/sites'
+          operator: 'GreaterThan'
+          threshold: 200
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+    windowSize: 'PT5M'
+    evaluationFrequency: 'PT1M'
   }
 }
 
