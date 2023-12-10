@@ -131,21 +131,6 @@ module webApp './modules/web/site/main.bicep' = {
   }
 }
 
-module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
-  name: '${appServiceAppName}-linkedBackend' // Unique name
-  params: {
-    name: appServiceAppName
-    location: location
-    region: location
-    staticSiteName: staticWebAppName
-    backendResourceId: webApp.outputs.resourceId
-  }
-  dependsOn: [
-    staticWebApp
-    webApp
-  ]
-}
-
 // Monitoring Parameters
 
 @sys.description('The name of the Azure Monitor workspace')
