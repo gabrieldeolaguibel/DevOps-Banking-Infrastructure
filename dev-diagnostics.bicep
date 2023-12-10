@@ -28,7 +28,7 @@ resource diagnosticSettingAppServicePlanDEV 'Microsoft.Insights/diagnosticSettin
   }
 }
 
-resource appServicePlanCpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+resource appServicePlanCpuAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: 'alert-lemonke-asp-dev'
   location: location
   properties: {
@@ -74,7 +74,7 @@ resource diagnosticSettingAppServiceAppDEV 'Microsoft.Insights/diagnosticSetting
   }
 }
 
-resource appServiceResponseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+resource appServiceResponseTimeAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: 'alert-lemonke-be-dev'
   location: location
   properties: {
@@ -121,7 +121,7 @@ resource diagnosticSettingPostgreSQLServerDEV 'Microsoft.Insights/diagnosticSett
   }
 }
 
-resource postgreSQLCpuUtilizationAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+resource postgreSQLCpuUtilizationAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: 'alert-lemonke-dbsrv-dev'
   location: location
   properties: {
