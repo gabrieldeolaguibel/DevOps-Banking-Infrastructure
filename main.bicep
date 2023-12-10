@@ -5,8 +5,8 @@ param location string
 param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
-param slackWebhookUrl string = ''
-param logicAppName string = ''
+param slackWebhookUrl string
+param logicAppName string
 
 // Exisiting resources
 param resourceGroupName string = 'aguadamillas_students_1'
