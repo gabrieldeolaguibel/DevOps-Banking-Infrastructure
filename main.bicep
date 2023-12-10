@@ -35,6 +35,7 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
     location: location
     repositoryToken: githubToken
     repositoryUrl: githubRepo
+    branch: 'main'
   }
 }
 
