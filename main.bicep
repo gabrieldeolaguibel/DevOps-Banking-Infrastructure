@@ -5,7 +5,6 @@ param location string
 param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
-param diagnosticsLogAnalyticsWorkspaceId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourcegroups/aguadamillas_students_2/providers/microsoft.operationalinsights/workspaces/lemonke-am'
 
 
 // Exisiting resources
@@ -129,14 +128,5 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
     Application_Type: 'web'
     // Conditional linking to Azure Monitor
     WorkspaceResourceId: ( ENV == 'prod' && azureMonitorName != 'dummy-value' ) ? resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName) : null
-  }
-}
-
-// Include the diagnostics module with dependencies
-module diagnostics './diagnostics.bicep' = {
-  name: 'diagnosticsDeployment-${uniqueString(resourceGroup().id)}'
-  scope: resourceGroup()
-  params: {
-    diagnosticsLogAnalyticsWorkspaceId: diagnosticsLogAnalyticsWorkspaceId
   }
 }
