@@ -1,4 +1,5 @@
 param diagnosticsLogAnalyticsWorkspaceId string
+param location string = 'global'
 
 // Existing resource for keyvault
 resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
@@ -28,6 +29,38 @@ resource keyVaultDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-0
   }
 }
 
+
+// Function to create alert for KeyVault
+resource keyVaultLatencyAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'alert-lemonke-kv'
+  location: location
+  properties: {
+    description: 'Alert when latency is over 100ms'
+    severity: 3
+    enabled: true
+    scopes: [
+      keyVault.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          name: 'alert-lemonke-kv'
+          criterionType: 'StaticThresholdCriterion'
+          metricName: 'ServiceApiLatency'
+          metricNamespace: 'Microsoft.KeyVault/vaults'
+          operator: 'GreaterThan'
+          threshold: 100
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+    windowSize: 'PT5M'
+    evaluationFrequency: 'PT1M'
+  }
+}
+
+
 // Function to create diagnostic settings for CR
 resource ACRDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'lmonkecr-diagnostics'
@@ -48,3 +81,5 @@ resource ACRDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-
     }]
   }
 }
+
+// THERE ARE NO AVAILABLE ALERTS FOR ACR
