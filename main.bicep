@@ -120,7 +120,7 @@ module webApp './modules/web/site/main.bicep' = {
 }
 
 module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
-  name: appServiceAppName
+  name: '${appServiceAppName}-linkedBackend' // Unique name
   params: {
     name: appServiceAppName
     location: location
