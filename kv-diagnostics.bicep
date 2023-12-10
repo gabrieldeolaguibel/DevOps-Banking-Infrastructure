@@ -13,7 +13,7 @@ resource cr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
 
  // Function to create diagnostic settings for KeyVault
 resource keyVaultDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'lemonke-kv-diagnostics'
+  name: 'keyvault-diagnostics'
   scope: keyVault
   properties: {
     workspaceId: diagnosticsLogAnalyticsWorkspaceId
