@@ -13,12 +13,12 @@
     },
     "sku": {
       "value": {
-          "capacity": 1,
-          "family": "B",
-          "name": "B1",
-          "size": "B1",
-          "tier": "Basic"
-        }
+        "capacity": 1,
+        "family": "B",
+        "name": "B1",
+        "size": "B1",
+        "tier": "Basic"
+      }
     },
     "appServicePlanName": {
       "value": "lemonke-asp-dev"

@@ -13,12 +13,12 @@
     },
     "sku": {
       "value": {
-          "capacity": 4,
-          "family": "S",
-          "name": "S1",
-          "size": "S1",
-          "tier": "Standard"
-        }
+        "capacity": 4,
+        "family": "S",
+        "name": "S1",
+        "size": "S1",
+        "tier": "Standard"
+      }
     },
     "appServicePlanName": {
       "value": "lemonke-asp-uat"
@@ -34,4 +34,3 @@
     }
   }
 }
-
