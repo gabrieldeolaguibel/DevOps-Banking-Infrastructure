@@ -5,7 +5,8 @@ param location string
 param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
-
+param slackWebhookUrl string = ''
+param logicAppName string = ''
 
 // Exisiting resources
 param resourceGroupName string = 'aguadamillas_students_1'
@@ -154,3 +155,44 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
     WorkspaceResourceId: ( ENV == 'prod' && azureMonitorName != 'dummy-value' ) ? resourceId('Microsoft.OperationalInsights/workspaces', azureMonitorName) : null
   }
 }
+
+// Slack Integration
+
+
+resource logicApp 'Microsoft.Logic/workflows@2019-05-01' = if (ENV == 'prod' && slackWebhookUrl != '') {
+  name: logicAppName
+  location: location
+  properties: {
+    definition: {
+      '$schema': 'https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#'
+      contentVersion: '1.0.0.0'
+      triggers: {
+        manual: {
+          type: 'Request'
+          kind: 'Http'
+          inputs: {
+            method: 'POST'
+            schema: {}
+          }
+        }
+      }
+      actions: {
+        sendToSlack: {
+          type: 'Http'
+          inputs: {
+            method: 'POST'
+            uri: slackWebhookUrl
+            headers: {
+              'Content-Type': 'application/json'
+            }
+            body: {
+              text: 'Alert from Azure Monitor: @{triggerBody()}'
+            }
+          }
+          runAfter: {}
+        }
+      }
+    }
+  }
+}
+

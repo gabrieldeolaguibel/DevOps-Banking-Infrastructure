@@ -1,12 +1,9 @@
 param diagnosticsLogAnalyticsWorkspaceId string
+param location string = 'global'
 
 
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-dev'
-}
-
-resource staticWebAppDev 'Microsoft.Web/staticsites@2021-02-01' existing = {
-  name: 'lemonke-fe-dev'
 }
 
 resource appServiceAppDev 'Microsoft.Web/sites@2021-02-01' existing = {
@@ -31,16 +28,32 @@ resource diagnosticSettingAppServicePlanDEV 'Microsoft.Insights/diagnosticSettin
   }
 }
 
-// Function to create diagnostic settings for Frontend Static App DEV-> logs are not activated as it costs money!
-resource diagnosticSettingStaticWebAppDEV 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'lmonke-fe-dev-diagnostics'
-  scope: staticWebAppDev
+resource appServicePlanCpuAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'alert-lemonke-asp-dev'
+  location: location
   properties: {
-    workspaceId: diagnosticsLogAnalyticsWorkspaceId
-    metrics: [{
-      category: 'AllMetrics'
-      enabled: true
-    }]
+    description: 'Alert when CPU utilization is over 80%'
+    severity: 3
+    enabled: true
+    scopes: [
+      appServicePlanDev.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          name: 'alert-lemonke-asp-dev'
+          criterionType: 'StaticThresholdCriterion'
+          metricName: 'CpuPercentage'
+          metricNamespace: 'Microsoft.Web/serverfarms'
+          operator: 'GreaterThan'
+          threshold: 80
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+    windowSize: 'PT5M'
+    evaluationFrequency: 'PT1M'
   }
 }
 
@@ -61,6 +74,36 @@ resource diagnosticSettingAppServiceAppDEV 'Microsoft.Insights/diagnosticSetting
   }
 }
 
+resource appServiceResponseTimeAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'alert-lemonke-be-dev'
+  location: location
+  properties: {
+    description: 'Alert when average response time is over 200ms'
+    severity: 3
+    enabled: true
+    scopes: [
+      appServiceAppDev.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          name: 'alert-lemonke-be-dev'
+          criterionType: 'StaticThresholdCriterion'
+          metricName: 'AverageResponseTime'
+          metricNamespace: 'Microsoft.Web/sites'
+          operator: 'GreaterThan'
+          threshold: 200
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+    windowSize: 'PT5M'
+    evaluationFrequency: 'PT1M'
+  }
+}
+
+
 // Azure Database for PostgreSQL DEV
 resource diagnosticSettingPostgreSQLServerDEV 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'lemonke-dbsrv-dev-diagnostics'
@@ -75,5 +118,34 @@ resource diagnosticSettingPostgreSQLServerDEV 'Microsoft.Insights/diagnosticSett
       category: 'AllMetrics'
       enabled: true
     }]
+  }
+}
+
+resource postgreSQLCpuUtilizationAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'alert-lemonke-dbsrv-dev'
+  location: location
+  properties: {
+    description: 'Alert when CPU utilization is over 70%'
+    severity: 3
+    enabled: true
+    scopes: [
+      postgreSQLServerDev.id
+    ]
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          name: 'alert-lemonke-dbsrv-dev'
+          criterionType: 'StaticThresholdCriterion'
+          metricName: 'cpu_percent'
+          metricNamespace: 'Microsoft.DBforPostgreSQL/flexibleservers'
+          operator: 'GreaterThan'
+          threshold: 70
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+    windowSize: 'PT5M'
+    evaluationFrequency: 'PT1M'
   }
 }
