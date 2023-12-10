@@ -31,6 +31,12 @@
     },
     "azureMonitorName": {
       "value": "dummy-value"
+    },
+    "logicAppName": {
+      "value": "dummy-value"
+    },
+    "slackWebhookUrl": {
+      "value": "dummy-value"
     }
   }
 }
