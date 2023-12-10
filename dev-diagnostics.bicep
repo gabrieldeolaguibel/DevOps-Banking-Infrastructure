@@ -6,7 +6,7 @@ resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: 'lemonke-asp-dev'
 }
 
-/* resource staticWebAppDev 'Microsoft.Web/staticsites@2021-02-01' existing = {
+resource staticWebAppDev 'Microsoft.Web/staticsites@2021-02-01' existing = {
   name: 'lemonke-fe-dev'
 }
 
@@ -16,7 +16,7 @@ resource appServiceAppDev 'Microsoft.Web/sites@2021-02-01' existing = {
 
 resource postgreSQLServerDev 'Microsoft.DBforPostgreSQL/flexibleservers@2021-06-01' existing = {
   name: 'lemonke-dbsrv-dev'
-} */
+}
 
 
 // Function to create diagnostic settings for App Service Plan (ASP) DEV -> There are no logs for ASP
@@ -33,7 +33,7 @@ resource diagnosticSettingAppServicePlanDEV 'Microsoft.Insights/diagnosticSettin
 }
 
 resource appServicePlanCpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'AppServicePlanCpuAlert-dev'
+  name: 'alert-lemonke-asp-dev'
   location: location
   properties: {
     description: 'Alert when CPU utilization is over 80%'
@@ -46,7 +46,7 @@ resource appServicePlanCpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
       'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
       allOf: [
         {
-          name: 'AppServicePlanCpuAlert-dev'
+          name: 'alert-lemonke-asp-dev'
           criterionType: 'StaticThresholdCriterion'
           metricName: 'CpuPercentage'
           metricNamespace: 'Microsoft.Web/serverfarms'
@@ -62,7 +62,7 @@ resource appServicePlanCpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
 }
 
 
-/* // Function to create diagnostic settings for Frontend Static App DEV-> logs are not activated as it costs money!
+// Function to create diagnostic settings for Frontend Static App DEV-> logs are not activated as it costs money!
 resource diagnosticSettingStaticWebAppDEV 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'lmonke-fe-dev-diagnostics'
   scope: staticWebAppDev
@@ -76,7 +76,7 @@ resource diagnosticSettingStaticWebAppDEV 'Microsoft.Insights/diagnosticSettings
 }
 
 resource staticWebAppErrorRateAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'StaticWebAppErrorRateAlert-dev'
+  name: 'alert-lemonke-fe-dev'
   location: location
   properties: {
     description: 'Alert when HTTP error rate is over 1%'
@@ -89,6 +89,8 @@ resource staticWebAppErrorRateAlert 'Microsoft.Insights/metricAlerts@2018-03-01'
       'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
       allOf: [
         {
+          name: 'alert-lemonke-fe-dev'
+          criterionType: 'StaticThresholdCriterion'
           metricName: 'Http5xx'
           metricNamespace: 'Microsoft.Web/staticsites'
           operator: 'GreaterThan'
@@ -121,7 +123,7 @@ resource diagnosticSettingAppServiceAppDEV 'Microsoft.Insights/diagnosticSetting
 }
 
 resource appServiceResponseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'AppServiceResponseTimeAlert-dev'
+  name: 'alert-lemonke-be-dev'
   location: location
   properties: {
     description: 'Alert when average response time is over 200ms'
@@ -134,6 +136,8 @@ resource appServiceResponseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01
       'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
       allOf: [
         {
+          name: 'alert-lemonke-be-dev'
+          criterionType: 'StaticThresholdCriterion'
           metricName: 'HttpQueueLength'
           metricNamespace: 'Microsoft.Web/sites'
           operator: 'GreaterThan'
@@ -166,7 +170,7 @@ resource diagnosticSettingPostgreSQLServerDEV 'Microsoft.Insights/diagnosticSett
 }
 
 resource postgreSQLCpuUtilizationAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
-  name: 'PostgreSQLCpuUtilizationAlert-dev'
+  name: 'alert-lemonke-dbsrv-dev'
   location: location
   properties: {
     description: 'Alert when CPU utilization is over 70%'
@@ -179,6 +183,8 @@ resource postgreSQLCpuUtilizationAlert 'Microsoft.Insights/metricAlerts@2018-03-
       'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
       allOf: [
         {
+          name: 'alert-lemonke-dbsrv-dev'
+          criterionType: 'StaticThresholdCriterion'
           metricName: 'cpu_percent'
           metricNamespace: 'Microsoft.DBforPostgreSQL/flexibleservers'
           operator: 'GreaterThan'
@@ -191,4 +197,3 @@ resource postgreSQLCpuUtilizationAlert 'Microsoft.Insights/metricAlerts@2018-03-
     evaluationFrequency: 'PT1M'
   }
 }
- */
