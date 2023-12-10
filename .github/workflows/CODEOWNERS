@@ -1,0 +1,14 @@
+# CODEOWNERS for the main branch in the infrastructure
+
+# These users are the default owners for everything in the repo.
+* @Lukasaurus11
+* @KTsula
+* @felixggj
+* @gabrieldeolaguibel
+* @Jannikwendt
+* @maudhelen
+* @cheblimarc4
+* @mmdrumond
+
+# For the security branch specifically
+/main/* @cheblimarc4 @gabrieldeolaguibel
