@@ -118,6 +118,7 @@ module webApp './modules/web/site/main.bicep' = {
     }
     appSettingsKeyValuePairs: {
       WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
+      ENV: ENV
       DBHOST: DBHOST
       DBUSER: DBUSER
       DBPASS: DBPASS
