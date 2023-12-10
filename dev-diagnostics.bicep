@@ -1,5 +1,6 @@
 param diagnosticsLogAnalyticsWorkspaceId string
 param location string = 'global'
+param actionGroupId string = '/subscriptions/e0b9cada-61bc-4b5a-bd7a-52c606726b3b/resourceGroups/aguadamillas_students_2/providers/Microsoft.Logic/workflows/lemonke-slack'
 
 
 resource appServicePlanDev 'Microsoft.Web/serverfarms@2021-02-01' existing = {
@@ -54,6 +55,11 @@ resource appServicePlanCpuAlertDEV 'Microsoft.Insights/metricAlerts@2018-03-01' 
     }
     windowSize: 'PT5M'
     evaluationFrequency: 'PT1M'
+    actions: [
+      {
+        actionGroupId: actionGroupId // Logic app id
+      }
+    ]
   }
 }
 
@@ -100,6 +106,11 @@ resource appServiceResponseTimeAlertDEV 'Microsoft.Insights/metricAlerts@2018-03
     }
     windowSize: 'PT5M'
     evaluationFrequency: 'PT1M'
+    actions: [
+      {
+        actionGroupId: actionGroupId // Logic app id
+      }
+    ]
   }
 }
 
@@ -147,5 +158,10 @@ resource postgreSQLCpuUtilizationAlertDEV 'Microsoft.Insights/metricAlerts@2018-
     }
     windowSize: 'PT5M'
     evaluationFrequency: 'PT1M'
+    actions: [
+      {
+        actionGroupId: actionGroupId // Logic app id
+      }
+    ]
   }
 }
