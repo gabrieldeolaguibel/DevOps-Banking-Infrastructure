@@ -137,7 +137,7 @@ jobs:
           subscriptionId: ${{ env.SUBSCRIPTION_ID_UAT }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_UAT }}
           template: ./main.bicep
-          parameters: ./parameters/prod.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }}
+          parameters: ./parameters/prod.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }} slackWebhookUrl=${{ secrets.SLACK_WEBHOOK_URL }}
           deploymentName: ${{ env.USER_ALIAS }}.${{ github.run_id }}.prod
           failOnStdErr: false
       - name: Deploy PROD Diagnostics
