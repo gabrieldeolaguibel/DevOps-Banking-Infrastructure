@@ -46,6 +46,8 @@ resource appServicePlanCpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
       'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
       allOf: [
         {
+          name: 'AppServicePlanCpuAlert-dev'
+          criterionType: 'StaticThresholdCriterion'
           metricName: 'CpuPercentage'
           metricNamespace: 'Microsoft.Web/serverfarms'
           operator: 'GreaterThan'
