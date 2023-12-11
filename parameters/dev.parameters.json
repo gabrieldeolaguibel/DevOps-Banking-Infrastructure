@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "postgreSQLServerName": {
-      "value": "lemonke-dbsrv-dev"
+      "value": "lemonke-dbsrv2-dev"
     },
     "postgreSQLDatabaseName": {
       "value": "lemonke-db-dev"
