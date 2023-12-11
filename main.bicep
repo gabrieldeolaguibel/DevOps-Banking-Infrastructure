@@ -55,6 +55,7 @@ module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
     webApp
   ]
     params: {
+      name: appServiceAppName
       location: location
       staticSiteName: staticWebApp.outputs.name
       backendResourceId: webApp.outputs.resourceId
