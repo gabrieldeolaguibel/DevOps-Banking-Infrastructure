@@ -49,7 +49,7 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
 
 //linked backend app to frontend app
 module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
-  name: '${staticWebAppName}/config'
+  name: '${staticWebAppName}-linkedBackend'
   dependsOn: [
     staticWebApp
     webApp
