@@ -29,7 +29,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
 param staticWebAppName string
 param githubToken string
 param githubRepo string
-param BERepo string
+
 module staticWebApp './modules/web/static-site/main.bicep' = {
   name: staticWebAppName
   params: {
