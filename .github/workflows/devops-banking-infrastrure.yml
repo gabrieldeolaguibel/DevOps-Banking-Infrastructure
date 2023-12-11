@@ -78,15 +78,15 @@ jobs:
           parameters: ./parameters/dev.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }} DBPASS=${{ secrets.DBPASS }} DBUSER=${{ secrets.DBUSER }} DBHOST=${{ env.DBHOST }} DBNAME=${{ env.DBNAME }} ENV=${{ env.ENV }}
           deploymentName: ${{ env.USER_ALIAS }}.${{ github.run_id }}.dev
           failOnStdErr: false
-      - name: Deploy Dev Diagnostics
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-          template: ./dev-diagnostics.bicep
-          parameters: ./parameters/diagnostics.parameters.json
-          deploymentName: diagnostics-${{ github.run_id }}.dev
-          failOnStdErr: false
+      # - name: Deploy Dev Diagnostics
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+      #     resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+      #     template: ./dev-diagnostics.bicep
+      #     parameters: ./parameters/diagnostics.parameters.json
+      #     deploymentName: diagnostics-${{ github.run_id }}.dev
+      #     failOnStdErr: false
 
   deploy-uat:
     if: github.ref == (github.event_name == 'pull_request' && github.event.action != 'closed') || github.ref == 'refs/heads/main'
