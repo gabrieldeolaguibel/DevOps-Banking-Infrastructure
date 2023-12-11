@@ -6,7 +6,7 @@ on:
       - main
       - "feature/**"
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened]
     branches:
       - main
   workflow_dispatch:
@@ -44,15 +44,15 @@ jobs:
           template: ./key-vault.bicep
           parameters: ./parameters/key-vault.parameters.json location=${{ env.LOCATION }}
           failOnStdErr: false
-      # - name: Deploy KeyVault and ACR Diagnostics
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-      #     resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-      #     template: ./kv-diagnostics.bicep
-      #     parameters: ./parameters/diagnostics.parameters.json
-      #     deploymentName: diagnostics-${{ github.run_id }}.global
-      #     failOnStdErr: false
+      - name: Deploy KeyVault and ACR Diagnostics
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+          template: ./kv-diagnostics.bicep
+          parameters: ./parameters/diagnostics.parameters.json
+          deploymentName: diagnostics-${{ github.run_id }}.global
+          failOnStdErr: false
 
   deploy-dev:
     if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.ref == (github.event_name == 'pull_request' && github.event_name.event != 'closed')
@@ -78,15 +78,15 @@ jobs:
           parameters: ./parameters/dev.parameters.json location=${{ env.LOCATION }} githubToken=${{ secrets.GITHUBTOKEN }} githubRepo=${{ vars.FRONT_END_REPO }} DBPASS=${{ secrets.DBPASS }} DBUSER=${{ secrets.DBUSER }} DBHOST=${{ env.DBHOST }} DBNAME=${{ env.DBNAME }} ENV=${{ env.ENV }}
           deploymentName: ${{ env.USER_ALIAS }}.${{ github.run_id }}.dev
           failOnStdErr: false
-      # - name: Deploy Dev Diagnostics
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-      #     resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-      #     template: ./dev-diagnostics.bicep
-      #     parameters: ./parameters/diagnostics.parameters.json
-      #     deploymentName: diagnostics-${{ github.run_id }}.dev
-      #     failOnStdErr: false
+      - name: Deploy Dev Diagnostics
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+          template: ./dev-diagnostics.bicep
+          parameters: ./parameters/diagnostics.parameters.json
+          deploymentName: diagnostics-${{ github.run_id }}.dev
+          failOnStdErr: false
 
   deploy-uat:
     if: github.ref == (github.event_name == 'pull_request' && github.event_name.event != 'closed') || github.ref == 'refs/heads/main'
