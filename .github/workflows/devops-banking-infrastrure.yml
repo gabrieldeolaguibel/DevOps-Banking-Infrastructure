@@ -44,15 +44,15 @@ jobs:
           template: ./key-vault.bicep
           parameters: ./parameters/key-vault.parameters.json location=${{ env.LOCATION }}
           failOnStdErr: false
-      - name: Deploy KeyVault and ACR Diagnostics
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
-          template: ./kv-diagnostics.bicep
-          parameters: ./parameters/diagnostics.parameters.json
-          deploymentName: diagnostics-${{ github.run_id }}.global
-          failOnStdErr: false
+      # - name: Deploy KeyVault and ACR Diagnostics
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     subscriptionId: ${{ env.SUBSCRIPTION_ID_DEV }}
+      #     resourceGroupName: ${{ env.RESOURCE_GROUP_DEV }}
+      #     template: ./kv-diagnostics.bicep
+      #     parameters: ./parameters/diagnostics.parameters.json
+      #     deploymentName: diagnostics-${{ github.run_id }}.global
+      #     failOnStdErr: false
 
   deploy-dev:
     if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.ref == (github.event_name == 'pull_request' && github.event.action != 'closed')
