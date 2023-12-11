@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "postgreSQLServerName": {
-      "value": "lemonke2-dbsrv-dev"
+      "value": "lemonke-dbsrv-dev"
     },
     "postgreSQLDatabaseName": {
-      "value": "lemonke2-db-dev"
+      "value": "lemonke-db-dev"
     },
     "staticWebAppName": {
       "value": "lemonke-fe-dev"
