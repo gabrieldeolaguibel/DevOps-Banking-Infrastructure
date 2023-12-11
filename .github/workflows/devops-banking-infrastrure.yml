@@ -91,7 +91,7 @@ jobs:
   deploy-uat:
     if: github.ref == (github.event_name == 'pull_request' && github.event_name.event != 'closed') || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, deploy-dev]
     environment:
       name: "User Acceptance Testing"
     env:
@@ -125,7 +125,7 @@ jobs:
   deploy-prod:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, deploy-uat]
     environment:
       name: "Production"
     env:
