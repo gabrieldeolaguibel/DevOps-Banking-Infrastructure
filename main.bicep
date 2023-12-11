@@ -100,6 +100,7 @@ module servicePlan './modules/web/serverfarm/main.bicep' = {
     location: location
     sku: sku
     reserved: true
+    appServiceEnvironmentId: ENV
   }
 }
 
