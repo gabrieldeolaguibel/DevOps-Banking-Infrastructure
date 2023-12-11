@@ -29,6 +29,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
 param staticWebAppName string
 param githubToken string
 param githubRepo string
+param BERepo string
 module staticWebApp './modules/web/static-site/main.bicep' = {
   name: staticWebAppName
   params: {
@@ -45,24 +46,31 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
       appArtifactLocation: ''
       apiArtifactLocation: ''
     }
+    linkedBackend: {
+      codeRepositoryUrl: BERepo
+      codeRepositoryAccessToken: githubToken
+      codeRepositoryBranch: 'main'
+      apiLocation: ''
+      isSwift: false
+    }
   }
 }
 
-//linked backend app to frontend app
-module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
-  name: '${staticWebAppName}-linkedBackend'
-  dependsOn: [
-    staticWebApp
-    webApp
-  ]
-    params: {
-      name: appServiceAppName
-      location: location
-      staticSiteName: staticWebApp.outputs.name
-      backendResourceId: webApp.outputs.resourceId
-      region: location
-  }
-}
+// //linked backend app to frontend app
+// module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
+//   name: '${staticWebAppName}-linkedBackend'
+//   dependsOn: [
+//     staticWebApp
+//     webApp
+//   ]
+//     params: {
+//       name: appServiceAppName
+//       location: location
+//       staticSiteName: staticWebApp.outputs.name
+//       backendResourceId: webApp.outputs.resourceId
+//       region: location
+//   }
+// }
 
 // Flexible server for PostgreSQL module
 module flexibleServer './modules/db-for-postgre-sql/flexible-server/main.bicep' = {
@@ -100,7 +108,6 @@ module servicePlan './modules/web/serverfarm/main.bicep' = {
     location: location
     sku: sku
     reserved: true
-    appServiceEnvironmentId: ENV
   }
 }
 
