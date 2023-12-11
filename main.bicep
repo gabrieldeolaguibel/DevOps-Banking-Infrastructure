@@ -5,8 +5,8 @@ param location string
 param ENV string = 'prod' 
 param postgreSQLServerName string
 param postgreSQLDatabaseName string
-param slackWebhookUrl string
-param logicAppName string
+param slackWebhookUrl string = ''
+param logicAppName string = ''
 
 // Exisiting resources
 param resourceGroupName string = 'aguadamillas_students_1'
@@ -34,6 +34,7 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
   params: {
     name: staticWebAppName
     location: location
+    sku: 'Standard'
     repositoryToken: githubToken
     repositoryUrl: githubRepo
     branch: 'main'
@@ -47,6 +48,21 @@ module staticWebApp './modules/web/static-site/main.bicep' = {
   }
 }
 
+//linked backend app to frontend app
+module linkedBackend './modules/web/static-site/linked-backend/main.bicep' = {
+  name: '${staticWebAppName}-linkedBackend'
+  dependsOn: [
+    staticWebApp
+    webApp
+  ]
+    params: {
+      name: appServiceAppName
+      location: location
+      staticSiteName: staticWebApp.outputs.name
+      backendResourceId: webApp.outputs.resourceId
+      region: location
+  }
+}
 
 // Flexible server for PostgreSQL module
 module flexibleServer './modules/db-for-postgre-sql/flexible-server/main.bicep' = {
@@ -132,6 +148,7 @@ module webApp './modules/web/site/main.bicep' = {
     dockerRegistryServerPassword: keyvault.getSecret(keyVaultSecretNameACRPassword1)
   }
 }
+
 
 // Monitoring Parameters
 

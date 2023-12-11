@@ -6,7 +6,7 @@ on:
       - main
       - "feature/**"
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened]
     branches:
       - main
   workflow_dispatch:
@@ -55,7 +55,7 @@ jobs:
           failOnStdErr: false
 
   deploy-dev:
-    if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.ref == (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.ref == (github.event_name == 'pull_request' && github.event_name.event != 'closed')
     runs-on: ubuntu-latest
     needs: [build, deploy-key-vault-and-acr]
     environment:
@@ -89,9 +89,9 @@ jobs:
           failOnStdErr: false
 
   deploy-uat:
-    if: github.ref == (github.event_name == 'pull_request' && github.event.action != 'closed') || github.ref == 'refs/heads/main'
+    if: github.ref == (github.event_name == 'pull_request' && github.event_name.event != 'closed') || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [deploy-dev]
+    needs: [build, deploy-dev]
     environment:
       name: "User Acceptance Testing"
     env:
@@ -125,7 +125,7 @@ jobs:
   deploy-prod:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [deploy-uat]
+    needs: [build, deploy-uat]
     environment:
       name: "Production"
     env:
